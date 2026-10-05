@@ -197,12 +197,20 @@ export function SiteNav({
           </nav>
         </div>
 
-        <div className="pt-8 mt-auto">
+        <div className="pt-8 mt-auto space-y-3">
           <LiquidMetalButton
             label="Let's Talk →"
             href="/contact"
             className="w-full"
           />
+          <a
+            href="https://instagram.com/wasshot.media"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white/70 py-2.5 text-xs font-semibold text-ink transition hover:border-pink-500 hover:text-pink-600"
+          >
+            <span>Instagram: @wasshot.media ↗</span>
+          </a>
         </div>
       </div>
     </>

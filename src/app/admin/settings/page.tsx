@@ -25,6 +25,7 @@ export default function SettingsPage() {
   const [email, setEmail] = useState("wasshotmedia@gmail.com");
   const [phones, setPhones] = useState("+91 7396986817, +91 7330820239");
   const [city, setCity] = useState("Vijayawada, Andhra Pradesh, India");
+  const [instagram, setInstagram] = useState("https://instagram.com/wasshot.media");
 
   // Operational Preferences
   const [conflictDetection, setConflictDetection] = useState(true);
@@ -51,6 +52,7 @@ export default function SettingsPage() {
         if (setRes.settings.primaryEmail) setEmail(setRes.settings.primaryEmail);
         if (setRes.settings.phones) setPhones(setRes.settings.phones.join(", "));
         if (setRes.settings.city) setCity(setRes.settings.city);
+        if (setRes.settings.instagram) setInstagram(setRes.settings.instagram);
       }
     } catch (err) {
       console.error("Failed to load settings", err);
@@ -72,6 +74,7 @@ export default function SettingsPage() {
           primaryEmail: email,
           phones: phones.split(",").map((s) => s.trim()).filter(Boolean),
           city,
+          instagram,
         }),
       });
 
@@ -216,6 +219,17 @@ export default function SettingsPage() {
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              className="w-full rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] px-3 py-2 text-ink focus:border-orange focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-ink mb-1">Official Instagram</label>
+            <input
+              type="text"
+              value={instagram}
+              onChange={(e) => setInstagram(e.target.value)}
+              placeholder="https://instagram.com/wasshot.media"
               className="w-full rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] px-3 py-2 text-ink focus:border-orange focus:bg-white focus:outline-none"
             />
           </div>

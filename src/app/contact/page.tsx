@@ -5,6 +5,24 @@ import { FaqList } from "@/components/site/FaqList";
 import { BlurSlideText } from "@/components/site/Reveal";
 import { Mail, Phone, MapPin, MessageCircle, ShieldCheck, CheckCircle2 } from "lucide-react";
 
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
 export const metadata = {
   title: "Contact & Project Inquiry | WasShot Media",
   description: "Start a project with WasShot Media. Commercial video production, video editing, websites, campaigns, and digital growth.",
@@ -115,6 +133,29 @@ export default async function ContactPage() {
                 </div>
               </div>
               <span className="text-xs font-bold text-emerald-700 group-hover:translate-x-1 transition-transform pr-2">
+                ↗
+              </span>
+            </a>
+
+            {/* Official Instagram */}
+            <a
+              href="https://instagram.com/wasshot.media"
+              target="_blank"
+              rel="noreferrer"
+              className="group flex items-center justify-between rounded-2xl border border-pink-500/20 bg-gradient-to-r from-pink-50/50 via-purple-50/30 to-amber-50/30 p-4 transition-all duration-300 hover:border-pink-500/40 hover:shadow-xs hover:-translate-y-0.5"
+            >
+              <div className="flex items-center gap-3.5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-pink-100 text-pink-600 transition-colors group-hover:bg-gradient-to-tr group-hover:from-amber-500 group-hover:via-pink-500 group-hover:to-purple-600 group-hover:text-white">
+                  <InstagramIcon className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-pink-800">Official Instagram</p>
+                  <p className="font-semibold text-ink text-sm sm:text-base">
+                    @wasshot.media
+                  </p>
+                </div>
+              </div>
+              <span className="text-xs font-bold text-pink-600 group-hover:translate-x-1 transition-transform pr-2">
                 ↗
               </span>
             </a>

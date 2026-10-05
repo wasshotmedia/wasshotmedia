@@ -95,8 +95,7 @@ export function SiteFooter({
   const displayWhatsapp = whatsapp
     ? `https://wa.me/${whatsapp.replace(/\D/g, "")}`
     : "https://wa.me/917396986817";
-  const displayInstagram = instagram || "https://instagram.com/wasshotmedia";
-  const displayLinkedin = linkedin || "https://linkedin.com/company/wasshotmedia";
+  const displayInstagram = instagram || "https://instagram.com/wasshot.media";
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(displayEmail);
@@ -226,16 +225,18 @@ export function SiteFooter({
               An independent creative media and digital engineering studio. We unite cinematic visuals, bespoke web software, and organic growth distribution under one roof.
             </p>
 
-            {/* Social Channels */}
-            <div className="mt-8 flex flex-wrap gap-2.5">
+            {/* Social / Direct Channels */}
+            <div className="mt-8 flex flex-wrap items-center gap-2.5">
               <a
                 href={displayInstagram}
                 target="_blank"
                 rel="noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-ink transition hover:border-orange hover:bg-orange hover:text-white"
-                aria-label="Instagram"
+                className="group flex h-10 items-center gap-2 rounded-full border border-pink-500/25 bg-white px-3.5 text-xs font-semibold text-ink transition hover:border-pink-500 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-500 hover:to-purple-600 hover:text-white"
+                aria-label="Instagram @wasshot.media"
+                title="Follow @wasshot.media on Instagram"
               >
-                <InstagramIcon className="h-4 w-4" />
+                <InstagramIcon className="h-4 w-4 text-pink-600 group-hover:text-white transition-colors" />
+                <span>@wasshot.media</span>
               </a>
               <a
                 href={displayWhatsapp}
@@ -245,15 +246,6 @@ export function SiteFooter({
                 aria-label="WhatsApp"
               >
                 <MessageCircle className="h-4 w-4" />
-              </a>
-              <a
-                href={displayLinkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-ink transition hover:border-orange hover:bg-orange hover:text-white"
-                aria-label="LinkedIn"
-              >
-                <LinkedinIcon className="h-4 w-4" />
               </a>
               <a
                 href={`mailto:${displayEmail}`}
