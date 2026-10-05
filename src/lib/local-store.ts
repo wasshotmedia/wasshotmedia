@@ -242,7 +242,7 @@ function getInitialStore(): StudioStoreData {
       singleton: "agency",
       brandName: defaultContent.brandName,
       tagline: defaultContent.tagline,
-      email: "hello@wasshotmedia.com",
+      email: "wasshotmedia@gmail.com",
       phone: "+91 73969 86817",
       whatsapp: "+91 73969 86817",
       instagram: "https://instagram.com/wasshot.media",

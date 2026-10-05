@@ -11,6 +11,8 @@ async function main() {
         email: "wasshotmedia@gmail.com",
         phone: "+91 7396986817",
         whatsapp: "+91 7396986817",
+        instagram: "https://instagram.com/wasshot.media",
+        linkedin: "",
         address: "Vijayawada, Andhra Pradesh, India",
       },
     },
