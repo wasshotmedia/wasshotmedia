@@ -1,26 +1,263 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Cal Sans";
+  src: url("/fonts/CalSans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/Caveat.ttf") format("truetype");
+  font-weight: 500 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-cal {
+  font-family: "Cal Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-handwriting {
+  font-family: "Caveat", cursive, sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #efeee9;
+  --foreground: #111111;
+  --muted: #6d6b66;
+  --line: rgba(17, 17, 17, 0.08);
+  --orange: #ff4d14;
+  --orange-soft: #ff7a3d;
+  --card: #f7f6f2;
+  --white: #ffffff;
+  --ink: #111111;
+  --shadow: 0 20px 50px rgba(17, 17, 17, 0.08);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-orange: var(--orange);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-manrope);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Inter, system-ui, sans-serif;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--orange);
+  color: white;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.display {
+  font-family: var(--font-manrope), var(--font-geist-sans), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+}
+
+.tracked {
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pill {
+  border-radius: 999px;
+}
+
+.soft-card {
+  background: var(--card);
+  border-radius: 28px;
+}
+
+.site-grid {
+  width: min(1440px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .site-grid {
+    width: min(1440px, calc(100% - 80px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.admin-shell {
+  background: #f4f3ee;
+  color: #111;
+}
+
+/* Cinematic Visual Card Animations */
+@keyframes shimmerSweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  50%, 100% {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes playheadScan {
+  0% {
+    left: 0%;
+  }
+  50% {
+    left: 85%;
+  }
+  100% {
+    left: 0%;
+  }
+}
+
+@keyframes audioEqualizer {
+  0%, 100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes chartBarPulse {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.12);
+  }
+}
+
+@keyframes lensAperturePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(255, 77, 20, 0.35);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 32px rgba(255, 77, 20, 0.75);
+  }
+}
+
+@keyframes slowRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-shimmer-sweep {
+  animation: shimmerSweep 3.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-playhead {
+  animation: playheadScan 5s ease-in-out infinite;
+}
+
+.animate-audio-eq {
+  transform-origin: bottom;
+  animation: audioEqualizer 1.4s ease-in-out infinite;
+}
+
+.animate-chart-pulse {
+  transform-origin: bottom;
+  animation: chartBarPulse 2.8s ease-in-out infinite;
+}
+
+.animate-lens-pulse {
+  animation: lensAperturePulse 3.2s ease-in-out infinite;
+}
+
+.animate-slow-rotate {
+  animation: slowRotate 24s linear infinite;
+}
+
+/* Framer-Style Infinite Work Marquee Tickers */
+@keyframes marqueeLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marqueeRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeft 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marqueeRight 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+  animation-play-state: paused;
 }

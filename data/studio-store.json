@@ -1,0 +1,381 @@
+{
+  "users": [
+    {
+      "_id": "6ac2971aa9614f9f4657a359",
+      "name": "Admin",
+      "email": "admin@wasshotmedia.com",
+      "passwordHash": "$2b$10$/8Ys4uNDxjm5BpFGX6opqekVJO4B3iyKCbHIid0Ro/paKmVMlLesu",
+      "role": "owner",
+      "title": "Creative & Digital Lead",
+      "isActive": true,
+      "createdAt": "2026-10-04T18:12:42.808Z",
+      "updatedAt": "2026-10-04T18:26:03.512Z",
+      "lastLoginAt": "2026-10-04T18:26:03.512Z"
+    },
+    {
+      "_id": "6ac2971aa8615b6d94465957",
+      "name": "Studio Lead",
+      "email": "lead@wasshotmedia.com",
+      "passwordHash": "$2b$10$HM6zEDWMACquAFRfL56Ml.5e0oP5l5wr8AQdHcf9qT3ioiv2PRwKW",
+      "role": "owner",
+      "title": "Creative & Media Lead",
+      "isActive": true,
+      "createdAt": "2026-10-04T18:12:42.808Z",
+      "updatedAt": "2026-10-04T18:12:42.808Z"
+    }
+  ],
+  "clients": [],
+  "leads": [],
+  "projects": [],
+  "tasks": [],
+  "events": [],
+  "reminders": [],
+  "notifications": [],
+  "invoices": [],
+  "payments": [],
+  "services": [
+    {
+      "number": "01",
+      "slug": "shooting",
+      "title": "Shooting",
+      "visualKey": "shooting",
+      "description": "Cinematic production for brands that need stills and moving images with intention.",
+      "deliverables": [
+        "Brand films",
+        "Product photography",
+        "On-location shoots",
+        "Direction"
+      ],
+      "_id": "6ac2971a2dc0d7227ade2cd8",
+      "order": 0,
+      "published": true
+    },
+    {
+      "number": "02",
+      "slug": "video-editing",
+      "title": "Video Editing",
+      "visualKey": "editing",
+      "description": "Pace, colour and sound shaped so the story lands — from first cut to final master.",
+      "deliverables": [
+        "Offline / online edit",
+        "Colour",
+        "Sound mix",
+        "Social cuts"
+      ],
+      "_id": "6ac2971acd8b78f26bd48b94",
+      "order": 1,
+      "published": true
+    },
+    {
+      "number": "03",
+      "slug": "website-development",
+      "title": "Website Development",
+      "visualKey": "websites",
+      "description": "Custom websites that look premium and work hard for the business behind them.",
+      "deliverables": [
+        "UX / UI",
+        "Custom build",
+        "CMS",
+        "Performance"
+      ],
+      "_id": "6ac2971a42fd63997fe2cbfb",
+      "order": 2,
+      "published": true
+    },
+    {
+      "number": "04",
+      "slug": "seo",
+      "title": "SEO",
+      "visualKey": "seo",
+      "description": "Search work grounded in the actual pages, offers and audiences of the brand.",
+      "deliverables": [
+        "Technical SEO",
+        "On-page",
+        "Content structure",
+        "Measurement"
+      ],
+      "_id": "6ac2971ae05b608c2220891c",
+      "order": 3,
+      "published": true
+    },
+    {
+      "number": "05",
+      "slug": "promotions",
+      "title": "Promotions",
+      "visualKey": "promotions",
+      "description": "Campaign creative and distribution that keeps the work visible where it matters.",
+      "deliverables": [
+        "Social campaigns",
+        "Ad creative",
+        "Launch kits",
+        "Content calendars"
+      ],
+      "_id": "6ac2971a56ac91abc2404ddd",
+      "order": 4,
+      "published": true
+    },
+    {
+      "number": "06",
+      "slug": "strategy",
+      "title": "Strategy",
+      "visualKey": "strategy",
+      "description": "A clear brief before the cameras roll or the first line of code is written.",
+      "deliverables": [
+        "Creative strategy",
+        "Positioning",
+        "Project planning",
+        "Messaging"
+      ],
+      "_id": "6ac2971a998c202f772b4e6e",
+      "order": 5,
+      "published": true
+    }
+  ],
+  "portfolio": [
+    {
+      "_id": "6ac3292b8914c65776fdb8f7",
+      "title": "SAI TEJA FOAM WORKS",
+      "name": "SAI TEJA FOAM WORKS",
+      "slug": "sai-teja-foam-works",
+      "category": "Cinematography & Film",
+      "role": "Cinematography & Film",
+      "client": "RAMU",
+      "clientName": "RAMU",
+      "year": "2026",
+      "description": "SAI TEJA FOAM WORKS",
+      "deliverables": [
+        "Cinematic 4K Commercial",
+        "Social Cutdowns",
+        "Sound Design"
+      ],
+      "services": [
+        "Cinematic 4K Commercial",
+        "Social Cutdowns",
+        "Sound Design"
+      ],
+      "imageUrl": "/services/shooting.jpg",
+      "metrics": [],
+      "published": true,
+      "createdAt": "2026-10-05T04:35:55.553Z",
+      "updatedAt": "2026-10-05T04:35:55.553Z"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What services does WasShot Media provide?",
+      "answer": "Shooting, video editing, website development, SEO, promotions and creative strategy — either as connected work or as focused projects.",
+      "_id": "6ac2971acd3874cc6e30f5d0",
+      "order": 0,
+      "published": true
+    },
+    {
+      "question": "How do we start a project?",
+      "answer": "Send a brief through the contact form or WhatsApp. We review the objective, share a plan, and only start production once the scope is agreed.",
+      "_id": "6ac2971ab0ba22e88763e44d",
+      "order": 1,
+      "published": true
+    },
+    {
+      "question": "How long does a project take?",
+      "answer": "Timelines depend on the work. A focused edit or landing page is faster than a full shoot-plus-website engagement. We confirm dates before we begin.",
+      "_id": "6ac2971a19fda63f968821b5",
+      "order": 2,
+      "published": true
+    },
+    {
+      "question": "Can you handle shooting and editing together?",
+      "answer": "Yes. Production and post can live in the same team, so the edit is planned while we shoot.",
+      "_id": "6ac2971a88034837b47beb28",
+      "order": 3,
+      "published": true
+    },
+    {
+      "question": "Do you build custom websites?",
+      "answer": "Yes. We build original websites for the brand — not generic templates — including content structure and launch support.",
+      "_id": "6ac2971a448aebe9576a8273",
+      "order": 4,
+      "published": true
+    },
+    {
+      "question": "Do you manage social media promotions?",
+      "answer": "We create and run promotional work when it is part of the agreed scope. Ongoing management can be included in a custom package.",
+      "_id": "6ac2971a2763df942e63df43",
+      "order": 5,
+      "published": true
+    },
+    {
+      "question": "How does your pricing work?",
+      "answer": "Packages are starting points. Final pricing follows the brief, timeline and deliverables. Figures shown on the site are only published when they are set in the admin dashboard.",
+      "_id": "6ac2971a86250d3ea73bfcd1",
+      "order": 6,
+      "published": true
+    },
+    {
+      "question": "Can we request a custom package?",
+      "answer": "Yes. Most clients do. Tell us the outcome you need and we will shape a package around it.",
+      "_id": "6ac2971a1e57e8e919433fe6",
+      "order": 7,
+      "published": true
+    },
+    {
+      "question": "Can you work with businesses outside Vijayawada?",
+      "answer": "Yes. Creative and digital work can be remote. Shoots outside Vijayawada are planned case by case.",
+      "_id": "6ac2971a2097e0bebc380df2",
+      "order": 8,
+      "published": true
+    }
+  ],
+  "testimonials": [],
+  "pricing": [
+    {
+      "title": "Starter",
+      "description": "For small brands beginning their digital journey.",
+      "startingPrice": null,
+      "currency": "INR",
+      "billingType": "Project",
+      "highlighted": false,
+      "ctaLabel": "Get Started →",
+      "features": [
+        "Focused creative or digital scope",
+        "Clear deliverables",
+        "Direct communication with the team",
+        "Timeline agreed before start"
+      ],
+      "_id": "6ac2971ab898be15acec9d8f",
+      "order": 0,
+      "published": true
+    },
+    {
+      "title": "Growth",
+      "description": "For businesses ready to improve their online presence.",
+      "startingPrice": null,
+      "currency": "INR",
+      "billingType": "Project",
+      "highlighted": true,
+      "ctaLabel": "Get Started →",
+      "features": [
+        "Combined creative + digital work",
+        "Campaign or website focus",
+        "Review rounds included",
+        "Launch support"
+      ],
+      "_id": "6ac2971a5b7fc555e07ce1f6",
+      "order": 1,
+      "published": true
+    },
+    {
+      "title": "Custom",
+      "description": "For brands requiring a complete creative + digital solution.",
+      "startingPrice": null,
+      "currency": "INR",
+      "billingType": "Scoped proposal",
+      "highlighted": false,
+      "ctaLabel": "Get Started →",
+      "features": [
+        "Shooting, editing and digital under one plan",
+        "Dedicated project rhythm",
+        "Strategy before production",
+        "Tailored deliverables"
+      ],
+      "_id": "6ac2971aecaeaf634eb2ce48",
+      "order": 2,
+      "published": true
+    }
+  ],
+  "messages": [],
+  "activityLogs": [
+    {
+      "_id": "6ac3292b79cf7e39276b5f3e",
+      "actorName": "Admin",
+      "action": "create:portfolio",
+      "entityType": "portfolio",
+      "entityId": "6ac3292b8914c65776fdb8f7",
+      "meta": {},
+      "createdAt": "2026-10-05T04:35:55.556Z",
+      "updatedAt": "2026-10-05T04:35:55.556Z"
+    },
+    {
+      "_id": "6ac3289f9f1639e655c3e42a",
+      "actorName": "Admin",
+      "action": "delete:portfolio",
+      "entityType": "portfolio",
+      "entityId": "6ac3289f150db39aeb27b34b",
+      "meta": {},
+      "createdAt": "2026-10-05T04:33:35.730Z",
+      "updatedAt": "2026-10-05T04:33:35.730Z"
+    },
+    {
+      "_id": "6ac3289fd154fef31e95db86",
+      "actorName": "Admin",
+      "action": "create:portfolio",
+      "entityType": "portfolio",
+      "entityId": "6ac3289f150db39aeb27b34b",
+      "meta": {},
+      "createdAt": "2026-10-05T04:33:35.524Z",
+      "updatedAt": "2026-10-05T04:33:35.524Z"
+    },
+    {
+      "_id": "6ac328624248e881e2301838",
+      "actorName": "Admin",
+      "action": "delete:portfolio",
+      "entityType": "portfolio",
+      "entityId": "6ac32860e8009fa4a63ce63c",
+      "meta": {},
+      "createdAt": "2026-10-05T04:32:34.687Z",
+      "updatedAt": "2026-10-05T04:32:34.687Z"
+    },
+    {
+      "_id": "6ac328601a68e456c222cb42",
+      "actorName": "Admin",
+      "action": "create:portfolio",
+      "entityType": "portfolio",
+      "entityId": "6ac32860e8009fa4a63ce63c",
+      "meta": {},
+      "createdAt": "2026-10-05T04:32:32.814Z",
+      "updatedAt": "2026-10-05T04:32:32.814Z"
+    },
+    {
+      "_id": "crm_system_init",
+      "actorName": "System",
+      "action": "Studio CRM operational",
+      "entityType": "system",
+      "createdAt": "2026-10-05T04:15:44.427Z"
+    }
+  ],
+  "settings": {
+    "singleton": "agency",
+    "brandName": "WasShot Media",
+    "tagline": "WE CREATE. YOU GROW.",
+    "email": "hello@wasshotmedia.com",
+    "phone": "+91 73969 86817",
+    "whatsapp": "+91 73969 86817",
+    "instagram": "https://instagram.com/wasshotmedia",
+    "linkedin": "https://linkedin.com/company/wasshotmedia",
+    "address": "Hyderabad, India",
+    "seoTitle": "WasShot Media — Creative Media + Digital Agency",
+    "seoDescription": "WasShot Media helps brands turn ideas into powerful visuals, websites and digital experiences that people remember.",
+    "availabilityLabel": "Available for new projects",
+    "availableForProjects": true,
+    "founders": [],
+    "homepage": {
+      "heroLabel": "Creative Media × Digital",
+      "heroHeadline": [
+        "WE",
+        "CREATE",
+        "YOU",
+        "GROW"
+      ],
+      "heroMessage": "Stories that look good.\nDigital experiences that work.",
+      "heroSupport": "WasShot Media helps brands turn ideas into powerful visuals, websites and digital experiences that people remember.",
+      "introLabel": "What we do",
+      "introHeadline": [
+        "We help brands",
+        "look better,",
+        "tell better",
+        "stories,",
+        "and grow online."
+      ],
+      "introSupport": "From the first frame to the final click, we bring creative production, design and digital strategy together."
+    }
+  }
+}
