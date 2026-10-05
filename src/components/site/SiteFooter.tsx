@@ -113,8 +113,8 @@ export function SiteFooter({
   return (
     <footer className="relative mt-24 border-t border-black/[0.08] bg-[#efeee9] text-ink selection:bg-orange selection:text-white">
       {/* Top CTA Callout Card matching website cream palette */}
-      <div className="site-grid pt-16 md:pt-24">
-        <div className="rounded-[32px] border border-black/[0.08] bg-white p-8 shadow-[0_20px_50px_rgba(17,17,17,0.04)] md:p-14">
+      <div className="site-grid pt-12 md:pt-24">
+        <div className="rounded-2xl sm:rounded-[32px] border border-black/[0.08] bg-white p-5 sm:p-8 md:p-14 shadow-[0_20px_50px_rgba(17,17,17,0.04)]">
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2.5 rounded-full border border-emerald-600/20 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-800">
@@ -127,7 +127,7 @@ export function SiteFooter({
 
               <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center">
                 <BrandEmblem size={96} className="hidden sm:block shadow-[0_12px_40px_rgba(255,77,20,0.35)]" />
-                <h2 className="display text-4xl leading-[1.04] md:text-5xl lg:text-6xl">
+                <h2 className="display text-3xl sm:text-4xl leading-[1.08] sm:leading-[1.04] md:text-5xl lg:text-6xl">
                   Ready to build work that <span className="text-orange">commands attention?</span>
                 </h2>
               </div>

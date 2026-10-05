@@ -247,7 +247,7 @@ export function HighLevelPillars() {
         {PILLARS.map((pillar) => (
           <article
             key={pillar.id}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-[28px] sm:rounded-[32px] bg-white border border-black/[0.08] p-6 sm:p-7 md:p-8 text-ink shadow-[0_4px_24px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.07)] hover:border-black/15"
+            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-[32px] bg-white border border-black/[0.08] p-4.5 sm:p-7 md:p-8 text-ink shadow-[0_4px_24px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.07)] hover:border-black/15"
           >
             <div>
               {/* Top Meta Bar */}

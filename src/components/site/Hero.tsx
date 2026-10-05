@@ -50,24 +50,24 @@ export function Hero({
   const currentService = SERVICES[index];
 
   return (
-    <section className="relative px-0 pb-8 pt-32 md:pt-40">
+    <section className="relative px-0 pb-8 pt-28 sm:pt-36 md:pt-40">
       <div className="site-grid text-center">
         {/* Eyebrow Label */}
         <motion.p
           initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: delay(1) }}
-          className="mb-8 text-[11px] uppercase tracking-[0.28em] text-muted font-medium"
+          className="mb-6 sm:mb-8 text-[11px] uppercase tracking-[0.28em] text-muted font-medium"
         >
           {label}
         </motion.p>
 
         {/* Headline Matching Template (Cal Sans, Right-to-Left Blur Motion, No Circles) */}
-        <h1 className="font-cal mx-auto max-w-5xl text-5xl sm:text-7xl md:text-8xl lg:text-[96px] xl:text-[104px] font-bold leading-[1.06] tracking-[-0.03em] text-ink">
+        <h1 className="font-cal mx-auto max-w-5xl text-4xl sm:text-6xl md:text-8xl lg:text-[96px] xl:text-[104px] font-bold leading-[1.08] sm:leading-[1.06] tracking-[-0.03em] text-ink">
           <div className="flex flex-wrap items-center justify-center gap-x-[0.25em]">
             <BlurSlideText text="We Create" trigger="mount" delay={0.1} />
           </div>
-          <div className="mt-1.5 sm:mt-2.5 flex flex-wrap items-center justify-center gap-x-[0.25em]">
+          <div className="mt-1 sm:mt-2.5 flex flex-wrap items-center justify-center gap-x-[0.25em]">
             <BlurSlideText text="You" trigger="mount" delay={0.28} />
             <span className="text-orange">
               <BlurSlideText text="Grow" trigger="mount" delay={0.44} />

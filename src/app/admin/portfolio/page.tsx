@@ -367,7 +367,7 @@ export default function PortfolioCmsPage() {
       {/* 3. MODAL */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl border border-[#e8e8e3]">
+          <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
               <div>
                 <h3 className="font-display text-xl font-bold text-ink">
@@ -386,7 +386,7 @@ export default function PortfolioCmsPage() {
             </div>
 
             <form onSubmit={handleSave} className="mt-4 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Project Title *</label>
                   <input
@@ -424,8 +424,8 @@ export default function PortfolioCmsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <div className="col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="col-span-1 sm:col-span-2">
                   <label className="block font-bold text-ink mb-1">URL Slug</label>
                   <input
                     type="text"

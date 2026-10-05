@@ -40,6 +40,17 @@ export function SiteNav({
     setHoveredHref(null);
   }, [pathname]);
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <>
       {/* Main Navbar Header */}
@@ -151,16 +162,16 @@ export function SiteNav({
       {/* Mobile Drawer Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-30 flex flex-col justify-between bg-[#efeee9] px-8 pb-12 pt-28 transition-transform duration-500 md:hidden",
+          "fixed inset-0 z-30 flex flex-col justify-between overflow-y-auto max-h-[100dvh] bg-[#efeee9] px-6 sm:px-8 pb-10 pt-24 transition-transform duration-500 md:hidden",
           open ? "translate-y-0" : "-translate-y-full",
         )}
       >
         <div>
-          <div className="mb-8 border-b border-black/[0.08] pb-6">
-            <Logo iconSize={42} />
+          <div className="mb-6 border-b border-black/[0.08] pb-5">
+            <Logo iconSize={40} />
           </div>
 
-          <nav className="flex flex-col gap-5" aria-label="Mobile">
+          <nav className="flex flex-col gap-4 sm:gap-5" aria-label="Mobile">
             {links.map((link) => {
               const isActive =
                 link.href === "/"
@@ -172,18 +183,21 @@ export function SiteNav({
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "display text-4xl transition-colors",
-                    isActive ? "text-orange" : "text-ink",
+                    "display text-3xl sm:text-4xl py-1 transition-colors flex items-center justify-between",
+                    isActive ? "text-orange" : "text-ink hover:text-orange",
                   )}
                 >
-                  {link.label}
+                  <span>{link.label}</span>
+                  {isActive && (
+                    <span className="h-2 w-2 rounded-full bg-orange animate-pulse" />
+                  )}
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        <div className="pt-8">
+        <div className="pt-8 mt-auto">
           <LiquidMetalButton
             label="Let's Talk →"
             href="/contact"

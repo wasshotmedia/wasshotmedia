@@ -191,25 +191,25 @@ export default async function ServicesPage() {
   return (
     <PublicShell content={content}>
       {/* Hero Header Matching Template (Right-to-Left Motion Blur Reveal, No Circles) */}
-      <section className="relative overflow-hidden pt-36 pb-16 md:pt-44 md:pb-24">
+      <section className="relative overflow-hidden pt-28 pb-14 sm:pt-36 md:pt-44 md:pb-24">
         <div className="site-grid text-center">
-          <h1 className="display text-5xl sm:text-7xl md:text-8xl lg:text-[96px] xl:text-[104px] leading-[1.06] tracking-[-0.03em] text-ink">
+          <h1 className="display text-4xl sm:text-7xl md:text-8xl lg:text-[96px] xl:text-[104px] leading-[1.08] sm:leading-[1.06] tracking-[-0.03em] text-ink">
             <div className="flex flex-wrap items-center justify-center gap-x-[0.25em]">
               <BlurSlideText text="Our Creative" trigger="mount" delay={0.1} />
               <span className="text-orange">
                 <BlurSlideText text="Services" trigger="mount" delay={0.28} />
               </span>
             </div>
-            <div className="mt-2 sm:mt-3 md:mt-4 flex flex-wrap items-center justify-center gap-x-[0.25em]">
+            <div className="mt-1 sm:mt-2.5 flex flex-wrap items-center justify-center gap-x-[0.25em]">
               <BlurSlideText text="Excellence Delivered" trigger="mount" delay={0.46} />
             </div>
           </h1>
-          <p className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+          <p className="mx-auto mt-6 max-w-2xl text-sm sm:text-base leading-relaxed text-muted md:text-lg">
             We eliminated the split between video production and web engineering. WasShot Media operates as a unified studio, giving ambitious brands everything they need to command attention and scale online.
           </p>
 
           {/* Quick Metrics Bar */}
-          <div className="mx-auto mt-12 grid w-full max-w-4xl grid-cols-2 gap-4 rounded-3xl border border-black/[0.08] bg-white p-6 shadow-xs sm:grid-cols-4">
+          <div className="mx-auto mt-10 sm:mt-12 grid w-full max-w-4xl grid-cols-2 gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-black/[0.08] bg-white p-4 sm:p-6 shadow-xs sm:grid-cols-4">
             <div>
               <p className="display text-xl sm:text-2xl font-extrabold text-ink md:text-[26px]">6 CORE</p>
               <p className="mt-1 text-xs uppercase tracking-wider text-muted">Creative Services</p>
@@ -253,7 +253,7 @@ export default async function ServicesPage() {
               <div
                 key={srv.slug}
                 id={srv.slug}
-                className="overflow-hidden rounded-[32px] border border-black/[0.08] bg-white p-8 shadow-[0_16px_50px_rgba(17,17,17,0.03)] transition-all duration-300 md:p-12"
+                className="overflow-hidden rounded-2xl sm:rounded-[32px] border border-black/[0.08] bg-white p-5 sm:p-8 md:p-12 shadow-[0_16px_50px_rgba(17,17,17,0.03)] transition-all duration-300"
               >
                 <div className={`grid gap-10 lg:grid-cols-12 lg:items-center ${isReversed ? "lg:flex-row-reverse" : ""}`}>
                   {/* Text Column */}

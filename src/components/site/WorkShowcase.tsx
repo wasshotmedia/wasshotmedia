@@ -37,7 +37,7 @@ export function WorkShowcase({
     <section id="work" className="relative pb-32 pt-12 md:pt-16">
       {/* 1. Giant Watermark: "Recent Works" */}
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 select-none overflow-hidden text-center pb-6 md:pb-10">
-        <h2 className="font-display font-black text-6xl sm:text-8xl md:text-9xl lg:text-[148px] xl:text-[164px] tracking-[-0.04em] text-black/[0.08] uppercase leading-none pointer-events-none">
+        <h2 className="font-display font-black text-4xl sm:text-7xl md:text-9xl lg:text-[148px] xl:text-[164px] tracking-[-0.04em] text-black/[0.08] uppercase leading-none pointer-events-none">
           Recent Works
         </h2>
       </div>
@@ -45,7 +45,7 @@ export function WorkShowcase({
       {/* 2. Projects Container (Only admin-added projects) */}
       {displayProjects.length > 0 ? (
         <div className="site-grid relative">
-          <div className="relative space-y-16 sm:space-y-20 pb-16">
+          <div className="relative space-y-10 sm:space-y-16 md:space-y-20 pb-16">
             {displayProjects.map((project, idx) => {
               const projectNumber = String(idx + 1).padStart(2, "0");
 
@@ -54,13 +54,13 @@ export function WorkShowcase({
                   key={project.slug}
                   className="sticky transition-all duration-300"
                   style={{
-                    top: `calc(90px + ${idx * 24}px)`,
+                    top: `calc(72px + ${idx * 16}px)`,
                     zIndex: idx + 10,
                   }}
                 >
                   {/* Individual Card */}
                   <div
-                    className={`relative overflow-hidden rounded-[32px] sm:rounded-[40px] md:rounded-[48px] ${project.bgClass} border border-white/10 p-6 sm:p-10 md:p-14 text-white shadow-[0_24px_80px_rgba(0,0,0,0.6)]`}
+                    className={`relative overflow-hidden rounded-2xl sm:rounded-[36px] md:rounded-[48px] ${project.bgClass} border border-white/10 p-4.5 sm:p-8 md:p-14 text-white shadow-[0_24px_80px_rgba(0,0,0,0.6)]`}
                   >
                     {/* Ambient Glow */}
                     <div className="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-orange/15 blur-[100px]" />

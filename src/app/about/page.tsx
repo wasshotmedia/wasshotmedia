@@ -126,7 +126,7 @@ export default async function AboutPage() {
 
       {/* Studio Ethos */}
       <section className="site-grid pb-24">
-        <div className="mt-20 flex flex-col items-start justify-between gap-10 rounded-[32px] bg-ink p-8 text-white md:p-14 lg:flex-row lg:items-center">
+        <div className="mt-12 sm:mt-20 flex flex-col items-start justify-between gap-8 sm:gap-10 rounded-2xl sm:rounded-[32px] bg-ink p-5 sm:p-8 text-white md:p-14 lg:flex-row lg:items-center">
           <div className="max-w-3xl">
             <p className="font-display text-xs uppercase tracking-widest text-orange font-bold">Our Approach</p>
             <h2 className="display mt-3 text-3xl md:text-5xl">

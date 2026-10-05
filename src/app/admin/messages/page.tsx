@@ -79,7 +79,7 @@ export default function MessagesPage() {
       {/* 1. TOP HEADER */}
       <div className="flex flex-col justify-between gap-4 border-b border-[#e8e8e3] pb-5 sm:flex-row sm:items-center">
         <div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-orange">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-orange">
             Public Website Inbound · Briefs
           </span>
           <h1 className="display text-3xl font-extrabold text-ink">
@@ -96,7 +96,7 @@ export default function MessagesPage() {
         {loading ? (
           <div className="py-12 text-center text-xs text-muted">Loading inquiries...</div>
         ) : messages.length === 0 ? (
-          <div className="rounded-3xl border border-[#e8e8e3] bg-white p-12 text-center">
+          <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-8 sm:p-12 text-center">
             <Mail className="mx-auto h-8 w-8 text-muted/40" />
             <h3 className="display mt-3 text-lg font-bold text-ink">No inquiries yet</h3>
             <p className="mt-1 text-xs text-muted">
@@ -109,11 +109,11 @@ export default function MessagesPage() {
             return (
               <div
                 key={msg._id}
-                className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs transition hover:border-black/20"
+                className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs transition hover:border-black/20"
               >
                 <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
                   <div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       <h3 className="text-base font-bold text-ink">{msg.name}</h3>
                       {msg.company && (
                         <span className="rounded-md bg-black/[0.05] px-2 py-0.5 text-xs font-semibold text-muted">

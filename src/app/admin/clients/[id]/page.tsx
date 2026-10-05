@@ -283,7 +283,7 @@ export default function ClientProfilePage({
       </div>
 
       {/* 2. TABS */}
-      <div className="flex border-b border-[#e8e8e3] gap-2 overflow-x-auto">
+      <div className="flex border-b border-[#e8e8e3] gap-2 overflow-x-auto no-scrollbar">
         {[
           { key: "overview", label: "Overview", count: null },
           { key: "projects", label: "Projects", count: projects.length },
@@ -308,7 +308,7 @@ export default function ClientProfilePage({
       {/* 3. TAB CONTENT */}
       {activeTab === "overview" && (
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="space-y-4 rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs">
+          <div className="space-y-4 rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-3">
               <h3 className="font-display text-sm font-bold uppercase tracking-wider text-ink">
                 Account Dossier
@@ -407,7 +407,7 @@ export default function ClientProfilePage({
             </div>
           </div>
 
-          <div className="space-y-4 rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs lg:col-span-2">
+          <div className="space-y-4 rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs lg:col-span-2">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-3">
               <h3 className="font-display text-sm font-bold uppercase tracking-wider text-ink">
                 Active Productions & Deliverables
@@ -457,7 +457,7 @@ export default function ClientProfilePage({
       )}
 
       {activeTab === "projects" && (
-        <div className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs">
+        <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs">
           <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
             <h3 className="font-display text-sm font-bold text-ink uppercase tracking-wider">
               Client Projects ({projects.length})
@@ -505,7 +505,7 @@ export default function ClientProfilePage({
       )}
 
       {activeTab === "shoots" && (
-        <div className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs">
+        <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs">
           <h3 className="font-display text-sm font-bold text-ink uppercase tracking-wider border-b border-[#e8e8e3] pb-4">
             Scheduled Shoots & Calendar Events ({events.length})
           </h3>
@@ -540,7 +540,7 @@ export default function ClientProfilePage({
       )}
 
       {activeTab === "tasks" && (
-        <div className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs">
+        <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs">
           <h3 className="font-display text-sm font-bold text-ink uppercase tracking-wider border-b border-[#e8e8e3] pb-4">
             Client Tasks ({tasks.length})
           </h3>
@@ -567,7 +567,7 @@ export default function ClientProfilePage({
       )}
 
       {activeTab === "invoices" && (
-        <div className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs">
+        <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs">
           <h3 className="font-display text-sm font-bold text-ink uppercase tracking-wider border-b border-[#e8e8e3] pb-4">
             Client Invoices & Billings ({invoices.length})
           </h3>
@@ -598,8 +598,8 @@ export default function ClientProfilePage({
 
       {/* EDIT CLIENT MODAL */}
       {showEditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-xl rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs">
+          <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-3">
               <h2 className="font-display text-lg font-bold text-ink">
                 Edit Client Profile

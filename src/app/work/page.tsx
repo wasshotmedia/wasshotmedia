@@ -17,20 +17,20 @@ export default async function WorkPage() {
   return (
     <PublicShell content={content}>
       {/* Hero Header Matching Services (Right-to-Left Motion Blur Text Reveal, No Circles) */}
-      <section className="relative overflow-hidden pt-36 pb-14 md:pt-44 md:pb-20">
+      <section className="relative overflow-hidden pt-28 pb-10 sm:pt-36 sm:pb-14 md:pt-44 md:pb-20">
         <div className="site-grid text-center">
-          <h1 className="display text-5xl sm:text-7xl md:text-8xl lg:text-[96px] xl:text-[104px] leading-[1.06] tracking-[-0.03em] text-ink">
+          <h1 className="display text-4xl sm:text-7xl md:text-8xl lg:text-[96px] xl:text-[104px] leading-[1.08] sm:leading-[1.06] tracking-[-0.03em] text-ink">
             <div className="flex flex-wrap items-center justify-center gap-x-[0.25em]">
               <BlurSlideText text="Our Work" trigger="mount" delay={0.1} />
               <span className="text-orange">
                 <BlurSlideText text="In Action" trigger="mount" delay={0.28} />
               </span>
             </div>
-            <div className="mt-2 sm:mt-3 md:mt-4 flex flex-wrap items-center justify-center gap-x-[0.25em]">
+            <div className="mt-1 sm:mt-3 md:mt-4 flex flex-wrap items-center justify-center gap-x-[0.25em]">
               <BlurSlideText text="Featured Work" trigger="mount" delay={0.46} />
             </div>
           </h1>
-          <p className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+          <p className="mx-auto mt-6 max-w-2xl text-sm sm:text-base leading-relaxed text-muted md:text-lg">
             From commercial cinema campaigns to high-performance web engineering, explore how WasShot Media delivers impactful creative execution for ambitious brands.
           </p>
         </div>

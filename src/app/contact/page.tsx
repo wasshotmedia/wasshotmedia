@@ -20,21 +20,21 @@ export default async function ContactPage() {
   return (
     <PublicShell content={content}>
       {/* 1. Cinematic Hero Header Matching Agero Template (Right-to-Left Motion Blur Reveal, No Circles) */}
-      <section className="relative overflow-hidden pt-36 pb-20 md:pt-44 md:pb-28">
+      <section className="relative overflow-hidden pt-28 pb-14 sm:pt-36 sm:pb-20 md:pt-44 md:pb-28">
         <div className="site-grid text-center">
-          <h1 className="display text-5xl sm:text-7xl md:text-8xl lg:text-[96px] xl:text-[104px] leading-[1.06] tracking-[-0.03em] text-ink">
+          <h1 className="display text-4xl sm:text-7xl md:text-8xl lg:text-[96px] xl:text-[104px] leading-[1.08] sm:leading-[1.06] tracking-[-0.03em] text-ink">
             <div className="flex flex-wrap items-center justify-center gap-x-[0.25em]">
               <BlurSlideText text="Let’s Build" trigger="mount" delay={0.1} />
               <span className="text-orange">
                 <BlurSlideText text="Something" trigger="mount" delay={0.28} />
               </span>
             </div>
-            <div className="mt-2 sm:mt-3 md:mt-4 flex flex-wrap items-center justify-center gap-x-[0.25em]">
+            <div className="mt-1 sm:mt-3 md:mt-4 flex flex-wrap items-center justify-center gap-x-[0.25em]">
               <BlurSlideText text="Great Together" trigger="mount" delay={0.46} />
             </div>
           </h1>
 
-          <p className="mx-auto mt-7 max-w-xl text-base sm:text-lg leading-relaxed text-muted">
+          <p className="mx-auto mt-6 max-w-xl text-sm sm:text-lg leading-relaxed text-muted">
             Let’s create work worth talking about. Whether it’s commercial production, cutting-edge websites, or brand growth, we’re ready.
           </p>
         </div>

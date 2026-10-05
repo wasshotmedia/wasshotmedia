@@ -58,8 +58,8 @@ export function ServicesPanel({ services }: { services: PublicContent["services"
       </div>
 
       {/* Horizontal Service Tabs Bar */}
-      <div className="site-grid border-t border-black/10 py-4 sm:py-5">
-        <div className="flex flex-wrap items-center justify-start md:justify-between gap-5 sm:gap-8 overflow-x-auto no-scrollbar">
+      <div className="site-grid border-t border-black/10 py-3 sm:py-5">
+        <div className="flex items-center justify-start md:justify-between gap-4 sm:gap-8 overflow-x-auto no-scrollbar py-1">
           {services.map((service, idx) => {
             const isActive = active === idx;
             return (
@@ -134,7 +134,7 @@ export function ServicesPanel({ services }: { services: PublicContent["services"
             >
               <Link
                 href={`/services/${activeService.slug}`}
-                className="group relative block w-[280px] sm:w-[420px] md:w-[500px] lg:w-[560px] aspect-[16/10] rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-[0_24px_50px_rgba(0,0,0,0.22)] border border-white/20 bg-black"
+                className="group relative block w-[calc(100vw-48px)] sm:w-[420px] md:w-[500px] lg:w-[560px] aspect-[16/10] rounded-2xl sm:rounded-[32px] overflow-hidden shadow-[0_24px_50px_rgba(0,0,0,0.22)] border border-white/20 bg-black"
               >
                 <Image
                   src={currentImage}

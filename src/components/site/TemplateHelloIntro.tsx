@@ -118,7 +118,7 @@ export function TemplateHelloIntro({ lines, support }: TemplateHelloIntroProps) 
     lines.join(" ") !== "We help brands look better, tell better stories, and grow online.";
 
   return (
-    <section className="relative w-full overflow-hidden py-24 sm:py-32 md:py-36 px-4 sm:px-6 lg:px-8">
+    <section className="relative w-full overflow-hidden py-16 sm:py-28 md:py-36 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl text-center">
         {/* (hello) Eyebrow in Orange Cursive Script */}
         <motion.div
@@ -126,9 +126,9 @@ export function TemplateHelloIntro({ lines, support }: TemplateHelloIntroProps) 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-5 sm:mb-7 flex justify-center"
+          className="mb-4 sm:mb-7 flex justify-center"
         >
-          <span className="font-handwriting text-3xl sm:text-4xl text-[#ff4d00] select-none tracking-wide">
+          <span className="font-handwriting text-2xl sm:text-4xl text-[#ff4d00] select-none tracking-wide">
             (hello)
           </span>
         </motion.div>
@@ -139,7 +139,7 @@ export function TemplateHelloIntro({ lines, support }: TemplateHelloIntroProps) 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="font-cal mx-auto max-w-4xl text-3xl sm:text-4xl md:text-5xl lg:text-[54px] xl:text-[58px] font-bold tracking-tight leading-[1.18] sm:leading-[1.16]"
+          className="font-cal mx-auto max-w-4xl text-2xl sm:text-4xl md:text-5xl lg:text-[54px] xl:text-[58px] font-bold tracking-tight leading-[1.22] sm:leading-[1.16]"
         >
           {hasCustomLines ? (
             <span className="text-[#111111]">{lines.join(" ")}</span>
@@ -161,19 +161,19 @@ export function TemplateHelloIntro({ lines, support }: TemplateHelloIntroProps) 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.65, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 sm:mt-12 flex flex-col items-center gap-2.5 sm:gap-3"
+          className="mt-8 sm:mt-12 flex flex-col items-center gap-2 sm:gap-3"
         >
           {/* Row 1 */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {ROW_1_CHIPS.map((chip) => {
               const Icon = chip.icon;
               return (
                 <Link
                   key={chip.label}
                   href={chip.href}
-                  className="group inline-flex items-center gap-2 rounded-full bg-[#52565b] px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base font-medium text-white shadow-sm transition-all duration-300 hover:bg-[#ff4d00] hover:shadow-[0_8px_20px_rgba(255,77,0,0.35)] hover:-translate-y-0.5 active:translate-y-0 select-none"
+                  className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-[#52565b] px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-base font-medium text-white shadow-sm transition-all duration-300 hover:bg-[#ff4d00] hover:shadow-[0_8px_20px_rgba(255,77,0,0.35)] hover:-translate-y-0.5 active:translate-y-0 select-none"
                 >
-                  <Icon className="h-4 w-4 text-white/90 transition-transform duration-300 group-hover:scale-110" />
+                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white/90 transition-transform duration-300 group-hover:scale-110" />
                   <span>{chip.label}</span>
                 </Link>
               );
@@ -181,16 +181,16 @@ export function TemplateHelloIntro({ lines, support }: TemplateHelloIntroProps) 
           </div>
 
           {/* Row 2 */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {ROW_2_CHIPS.map((chip) => {
               const Icon = chip.icon;
               return (
                 <Link
                   key={chip.label}
                   href={chip.href}
-                  className="group inline-flex items-center gap-2 rounded-full bg-[#52565b] px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base font-medium text-white shadow-sm transition-all duration-300 hover:bg-[#ff4d00] hover:shadow-[0_8px_20px_rgba(255,77,0,0.35)] hover:-translate-y-0.5 active:translate-y-0 select-none"
+                  className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-[#52565b] px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-base font-medium text-white shadow-sm transition-all duration-300 hover:bg-[#ff4d00] hover:shadow-[0_8px_20px_rgba(255,77,0,0.35)] hover:-translate-y-0.5 active:translate-y-0 select-none"
                 >
-                  <Icon className="h-4 w-4 text-white/90 transition-transform duration-300 group-hover:scale-110" />
+                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white/90 transition-transform duration-300 group-hover:scale-110" />
                   <span>{chip.label}</span>
                 </Link>
               );

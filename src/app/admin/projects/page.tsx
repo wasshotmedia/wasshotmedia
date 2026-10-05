@@ -311,48 +311,50 @@ export default function ProjectsPage() {
         </div>
       ) : (
         /* Table View */
-        <div className="rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
-          <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="border-b border-[#e8e8e3] bg-[#fafaf8] font-mono text-[10px] font-bold uppercase text-muted">
-                <th className="px-5 py-3">Project Title</th>
-                <th className="px-4 py-3">Client</th>
-                <th className="px-4 py-3">Service</th>
-                <th className="px-4 py-3">Stage</th>
-                <th className="px-4 py-3">Budget</th>
-                <th className="px-4 py-3">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#f0f0eb]">
-              {filtered.map((p) => (
-                <tr key={p._id} className="hover:bg-[#fbfbfa]">
-                  <td className="px-5 py-3 font-bold text-ink">{p.title}</td>
-                  <td className="px-4 py-3 text-muted">{p.client?.name || "—"}</td>
-                  <td className="px-4 py-3 capitalize">{p.service}</td>
-                  <td className="px-4 py-3">
-                    <span className="rounded-full bg-orange/10 px-2.5 py-0.5 text-[10px] font-bold text-orange">
-                      {p.stage || "Pre-Production"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 font-mono font-bold">
-                    {p.budget ? formatMoney(p.budget) : "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-                      {p.status}
-                    </span>
-                  </td>
+        <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[600px] text-left text-xs">
+              <thead>
+                <tr className="border-b border-[#e8e8e3] bg-[#fafaf8] text-[10px] font-bold uppercase tracking-wider text-muted">
+                  <th className="px-5 py-3">Project Title</th>
+                  <th className="px-4 py-3">Client</th>
+                  <th className="px-4 py-3">Service</th>
+                  <th className="px-4 py-3">Stage</th>
+                  <th className="px-4 py-3">Budget</th>
+                  <th className="px-4 py-3">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-[#f0f0eb]">
+                {filtered.map((p) => (
+                  <tr key={p._id} className="hover:bg-[#fbfbfa]">
+                    <td className="px-5 py-3 font-bold text-ink">{p.title}</td>
+                    <td className="px-4 py-3 text-muted">{p.client?.name || "—"}</td>
+                    <td className="px-4 py-3 capitalize">{p.service}</td>
+                    <td className="px-4 py-3">
+                      <span className="rounded-full bg-orange/10 px-2.5 py-0.5 text-[10px] font-bold text-orange">
+                        {p.stage || "Pre-Production"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 font-semibold text-ink">
+                      {p.budget ? formatMoney(p.budget) : "—"}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                        {p.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {/* 4. NEW PROJECT MODAL */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-[#e8e8e3]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
               <div>
                 <h3 className="display text-xl font-bold text-ink">New Studio Project</h3>
@@ -379,7 +381,7 @@ export default function ProjectsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Client *</label>
                   <select
@@ -413,7 +415,7 @@ export default function ProjectsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Budget (₹ INR)</label>
                   <input

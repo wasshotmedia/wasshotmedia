@@ -348,7 +348,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       {/* 3. MAIN APPLICATION AREA */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top Header */}
-        <header className="flex h-16 shrink-0 items-center justify-between border-b border-[#e8e8e3] bg-white px-4 md:px-8">
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-[#e8e8e3] bg-white px-3 sm:px-6 md:px-8">
           {/* Left: Mobile Toggle & Breadcrumb */}
           <div className="flex items-center gap-3">
             <button
@@ -523,19 +523,19 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Scrollable View Content */}
-        <main className="flex-1 overflow-y-auto bg-[#fbfbfa] p-4 md:p-8">
+        <main className="flex-1 overflow-y-auto bg-[#fbfbfa] p-3 sm:p-5 md:p-8 max-w-full overflow-x-hidden">
           {children}
         </main>
       </div>
 
       {/* 4. COMMAND PALETTE MODAL (Ctrl + K) */}
       {searchOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-24">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 p-3">
           <div
             className="fixed inset-0 bg-black/40 backdrop-blur-xs"
             onClick={() => setSearchOpen(false)}
           />
-          <div className="relative w-full max-w-lg rounded-3xl border border-[#e8e8e3] bg-white p-4 shadow-2xl">
+          <div className="relative w-full max-w-lg rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 shadow-2xl">
             <div className="flex items-center gap-3 border-b border-[#e8e8e3] pb-3">
               <Search className="h-5 w-5 text-muted" />
               <input
@@ -769,9 +769,9 @@ function QuickCreateModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
       <div className="fixed inset-0 bg-black/50 backdrop-blur-xs" onClick={onClose} />
-      <div className="relative w-full max-w-lg rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-2xl">
+      <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-2xl">
         <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
           <h3 className="display text-xl font-bold capitalize">
             {type === "shoot"
@@ -837,7 +837,7 @@ function QuickCreateModal({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold uppercase text-muted">Date</label>
                   <input
@@ -921,7 +921,7 @@ function QuickCreateModal({
               </div>
 
               {(type === "client" || type === "lead") && (
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-semibold uppercase text-muted">Email</label>
                     <input

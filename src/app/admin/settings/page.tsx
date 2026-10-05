@@ -89,7 +89,7 @@ export default function SettingsPage() {
       {/* 1. TOP HEADER */}
       <div className="flex flex-col justify-between gap-4 border-b border-[#e8e8e3] pb-5 sm:flex-row sm:items-center">
         <div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-orange">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-orange">
             Studio Configuration · Agency Operations
           </span>
           <h1 className="display text-3xl font-extrabold text-ink">
@@ -109,7 +109,7 @@ export default function SettingsPage() {
       )}
 
       {/* 2. TEAM MEMBERS (PRANEETH & WASIM) */}
-      <div className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs">
+      <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs">
         <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-orange" />
@@ -117,7 +117,7 @@ export default function SettingsPage() {
               Studio Owners & Executive Team
             </h2>
           </div>
-          <span className="font-mono text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
             Active Accounts
           </span>
         </div>
@@ -126,12 +126,12 @@ export default function SettingsPage() {
           {team.map((member) => (
             <div
               key={member._id}
-              className="rounded-2xl border border-[#e8e8e3] bg-[#fafaf8] p-5 shadow-xs flex items-center justify-between"
+              className="rounded-2xl border border-[#e8e8e3] bg-[#fafaf8] p-4 sm:p-5 shadow-xs flex items-center justify-between"
             >
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-bold text-ink text-sm">{member.name}</h3>
-                  <span className="rounded-full bg-orange/10 px-2 py-0.5 font-mono text-[9px] font-bold uppercase text-orange">
+                  <span className="rounded-full bg-orange/10 px-2 py-0.5 text-[9px] font-bold uppercase text-orange">
                     {member.role}
                   </span>
                 </div>
@@ -150,8 +150,8 @@ export default function SettingsPage() {
       </div>
 
       {/* 3. STUDIO VERIFIED CONTACT & HQ SETTINGS FORM */}
-      <form onSubmit={handleSaveSettings} className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs space-y-5 text-xs">
-        <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
+      <form onSubmit={handleSaveSettings} className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs space-y-5 text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e8e8e3] pb-4">
           <div className="flex items-center gap-2">
             <Settings className="h-4 w-4 text-orange" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-ink">
@@ -167,7 +167,7 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block font-bold text-ink mb-1">Agency Name</label>
             <input
@@ -189,7 +189,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div>
             <label className="block font-bold text-ink mb-1">Primary Email</label>
             <input
@@ -223,7 +223,7 @@ export default function SettingsPage() {
       </form>
 
       {/* 4. CALENDAR & CONFLICT DETECTION POLICIES */}
-      <div className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs space-y-4 text-xs">
+      <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white p-4 sm:p-6 shadow-xs space-y-4 text-xs">
         <div className="flex items-center gap-2 border-b border-[#e8e8e3] pb-4">
           <Calendar className="h-4 w-4 text-orange" />
           <h2 className="text-sm font-bold uppercase tracking-wider text-ink">
@@ -232,26 +232,26 @@ export default function SettingsPage() {
         </div>
 
         <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-[#fafaf8] border border-[#e8e8e3]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-2xl bg-[#fafaf8] border border-[#e8e8e3]">
             <div>
               <p className="font-bold text-ink">Server-Side Double-Booking Conflict Detection</p>
               <p className="text-muted text-[11px]">
                 Checks for overlapping shoots across assigned team members (Praneeth and Wasim) before saving.
               </p>
             </div>
-            <span className="rounded-full bg-emerald-50 px-3 py-1 font-bold text-emerald-700 border border-emerald-200">
+            <span className="self-start sm:self-auto rounded-full bg-emerald-50 px-3 py-1 font-bold text-emerald-700 border border-emerald-200">
               Active & Enforced
             </span>
           </div>
 
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-[#fafaf8] border border-[#e8e8e3]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-2xl bg-[#fafaf8] border border-[#e8e8e3]">
             <div>
               <p className="font-bold text-ink">Persistent Automatic Shoot Reminders</p>
               <p className="text-muted text-[11px]">
                 Default reminders at 24 hours and 2 hours before every scheduled shoot with automatic sync on reschedule.
               </p>
             </div>
-            <span className="rounded-full bg-emerald-50 px-3 py-1 font-bold text-emerald-700 border border-emerald-200">
+            <span className="self-start sm:self-auto rounded-full bg-emerald-50 px-3 py-1 font-bold text-emerald-700 border border-emerald-200">
               Enabled (24h & 2h)
             </span>
           </div>

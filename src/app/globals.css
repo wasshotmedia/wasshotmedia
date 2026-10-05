@@ -103,14 +103,28 @@ a {
 }
 
 .site-grid {
-  width: min(1440px, calc(100% - 40px));
+  width: min(1440px, calc(100% - 32px));
   margin-inline: auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
+  .site-grid {
+    width: min(1440px, calc(100% - 48px));
+  }
+}
+
+@media (min-width: 1024px) {
   .site-grid {
     width: min(1440px, calc(100% - 80px));
   }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -156,7 +156,7 @@ export default function TasksPage() {
       {/* 1. TOP HEADER */}
       <div className="flex flex-col justify-between gap-4 border-b border-[#e8e8e3] pb-5 sm:flex-row sm:items-center">
         <div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-orange">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-orange">
             Studio Workflows · Action Items
           </span>
           <h1 className="display text-3xl font-extrabold text-ink">
@@ -178,7 +178,7 @@ export default function TasksPage() {
 
       {/* 2. TABS & FILTER BAR */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e8e8e3] bg-white p-3 text-xs">
-        <div className="flex rounded-full border border-[#e8e8e3] bg-[#fafaf8] p-1">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar rounded-full border border-[#e8e8e3] bg-[#fafaf8] p-1 max-w-full">
           {[
             { key: "all", label: "Active Tasks" },
             { key: "today", label: "Due Today" },
@@ -188,7 +188,7 @@ export default function TasksPage() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as any)}
-              className={`rounded-full px-3 py-1 font-semibold transition ${
+              className={`rounded-full px-3 py-1 font-semibold whitespace-nowrap transition ${
                 activeTab === tab.key
                   ? "bg-ink text-white"
                   : "text-muted hover:text-ink"
@@ -313,8 +313,8 @@ export default function TasksPage() {
 
       {/* 4. NEW TASK MODAL */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-[#e8e8e3]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
               <div>
                 <h3 className="display text-xl font-bold text-ink">Create Task</h3>
@@ -341,7 +341,7 @@ export default function TasksPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Project</label>
                   <select
@@ -374,7 +374,7 @@ export default function TasksPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Priority</label>
                   <select

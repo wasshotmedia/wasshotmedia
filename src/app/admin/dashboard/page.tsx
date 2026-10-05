@@ -156,7 +156,7 @@ export default function AdminDashboardPage() {
   if (loading) {
     return (
       <div className="flex h-96 items-center justify-center">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">
+        <p className="font-display text-xs uppercase tracking-widest text-muted">
           Loading Studio Dashboard...
         </p>
       </div>
@@ -176,10 +176,10 @@ export default function AdminDashboardPage() {
       {/* 1. TOP HEADER & OPERATIONAL ACTIONS */}
       <div className="flex flex-col justify-between gap-4 border-b border-[#e8e8e3] pb-6 sm:flex-row sm:items-end">
         <div>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-orange font-bold">
+          <span className="font-display text-[10px] uppercase tracking-widest text-orange font-bold">
             Studio Overview · Vijayawada HQ
           </span>
-          <h1 className="display mt-1 text-3xl font-extrabold text-ink md:text-4xl">
+          <h1 className="display mt-1 text-2xl sm:text-3xl font-extrabold text-ink md:text-4xl">
             Good morning, {userFirstName}
           </h1>
           <p className="mt-1 text-xs text-muted font-medium">
@@ -188,7 +188,7 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Global Quick Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar sm:flex-wrap">
           <Link
             href="/admin/calendar"
             className="inline-flex items-center gap-1.5 rounded-full bg-orange px-4 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-[#e03d07]"
@@ -371,7 +371,7 @@ export default function AdminDashboardPage() {
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="rounded-md bg-orange/10 px-2 py-0.5 font-mono text-[10px] font-bold text-orange">
+                        <span className="rounded-md bg-orange/10 px-2 py-0.5 font-display text-[10px] font-bold text-orange">
                           {new Date(ev.start).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -479,7 +479,7 @@ export default function AdminDashboardPage() {
             {data?.upcomingShoots && data.upcomingShoots.length > 0 ? (
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#f0f0eb] font-mono text-[10px] uppercase text-muted">
+                  <tr className="border-b border-[#f0f0eb] font-display text-[10px] uppercase font-bold text-muted">
                     <th className="py-2">Date & Time</th>
                     <th className="py-2">Shoot Title</th>
                     <th className="py-2">Location</th>
@@ -566,7 +566,7 @@ export default function AdminDashboardPage() {
               Recent Studio Activity Log
             </h2>
           </div>
-          <span className="font-mono text-[10px] text-muted uppercase">
+          <span className="font-display text-[10px] text-muted uppercase font-bold">
             Audit Trail
           </span>
         </div>
@@ -585,7 +585,7 @@ export default function AdminDashboardPage() {
                       </span>
                     )}
                   </div>
-                  <span className="font-mono text-[10px] text-muted">
+                  <span className="font-display text-[10px] text-muted font-medium">
                     {new Date(log.createdAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",

@@ -481,27 +481,29 @@ export default function CalendarPage() {
           </select>
         </div>
 
-        <div className="font-mono text-[11px] text-muted">
+        <div className="text-[11px] font-medium text-muted">
           Showing <strong>{filteredEvents.length}</strong> events
         </div>
       </div>
 
       {/* 3. CALENDAR VIEW */}
       {viewMode === "month" ? (
-        <div className="rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
-          {/* Day of Week Headers */}
-          <div className="grid grid-cols-7 border-b border-[#e8e8e3] bg-[#fafaf8] text-center font-mono text-[11px] font-bold uppercase text-muted py-2.5">
-            <div>Sun</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thu</div>
-            <div>Fri</div>
-            <div>Sat</div>
-          </div>
+        <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <div className="min-w-[640px]">
+              {/* Day of Week Headers */}
+              <div className="grid grid-cols-7 border-b border-[#e8e8e3] bg-[#fafaf8] text-center text-[11px] font-bold uppercase tracking-wider text-muted py-2.5">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+              </div>
 
-          {/* Days Grid */}
-          <div className="grid grid-cols-7 divide-x divide-y divide-[#f0f0eb]">
+              {/* Days Grid */}
+              <div className="grid grid-cols-7 divide-x divide-y divide-[#f0f0eb]">
             {calendarDays.map((cell, idx) => {
               const dayEvents = filteredEvents.filter((ev) =>
                 ev.start && ev.start.startsWith(cell.dateStr)
@@ -574,7 +576,9 @@ export default function CalendarPage() {
             })}
           </div>
         </div>
-      ) : (
+      </div>
+    </div>
+  ) : (
         /* Agenda / List View */
         <div className="rounded-3xl border border-[#e8e8e3] bg-white p-6 shadow-xs">
           <h3 className="text-sm font-bold uppercase tracking-wider text-ink border-b border-[#e8e8e3] pb-3">
@@ -899,8 +903,8 @@ export default function CalendarPage() {
 
       {/* 5. SCHEDULE / EDIT SHOOT MODAL */}
       {showScheduleModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl border border-[#e8e8e3]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
               <div>
                 <h3 className="display text-xl font-bold text-ink">
@@ -939,7 +943,7 @@ export default function CalendarPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Type</label>
                   <select
@@ -973,7 +977,7 @@ export default function CalendarPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">
                     Start Date & Time *
@@ -1037,7 +1041,7 @@ export default function CalendarPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Location</label>
                   <input
@@ -1061,7 +1065,7 @@ export default function CalendarPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">
                     Equipment Checklist (One per line)

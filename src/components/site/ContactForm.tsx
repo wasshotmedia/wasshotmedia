@@ -110,7 +110,7 @@ export function ContactForm({ whatsapp = "917396986817" }: { whatsapp?: string }
   }
 
   return (
-    <div className="rounded-[32px] border border-black/10 bg-white p-6 sm:p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
+    <div className="rounded-2xl sm:rounded-[32px] border border-black/10 bg-white p-4.5 sm:p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
       {/* High-Level Studio Header */}
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-black/[0.08] pb-6">
         <div>
@@ -298,7 +298,7 @@ export function ContactForm({ whatsapp = "917396986817" }: { whatsapp?: string }
 
         {/* 6. Actions & Studio Guarantee */}
         <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             <LiquidMetalButton
               type="submit"
               disabled={status === "sending"}
@@ -311,7 +311,7 @@ export function ContactForm({ whatsapp = "917396986817" }: { whatsapp?: string }
                 href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-3.5 text-xs font-bold text-ink transition hover:border-emerald-500 hover:text-emerald-700"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white px-5 py-3.5 text-xs font-bold text-ink transition hover:border-emerald-500 hover:text-emerald-700"
               >
                 <MessageCircle className="h-4 w-4 text-emerald-600" />
                 <span>Quick WhatsApp</span>

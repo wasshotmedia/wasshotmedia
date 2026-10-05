@@ -34,10 +34,10 @@ export default async function WorkDetailPage({
 
   return (
     <PublicShell content={content}>
-      <article className="site-grid pb-24 pt-36">
+      <article className="site-grid pb-20 pt-28 sm:pt-36">
         <p className="eyebrow">{project.year || "2026"}</p>
-        <h1 className="display mt-4 text-5xl md:text-7xl lg:text-8xl">{project.name}</h1>
-        <div className="mt-10 overflow-hidden rounded-[32px] border border-black/10">
+        <h1 className="display mt-3 text-3xl sm:text-5xl md:text-7xl lg:text-8xl">{project.name}</h1>
+        <div className="mt-8 sm:mt-10 overflow-hidden rounded-2xl sm:rounded-[32px] border border-black/10">
           {project.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img

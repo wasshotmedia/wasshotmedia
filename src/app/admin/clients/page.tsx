@@ -198,9 +198,9 @@ export default function ClientsPage() {
       </div>
 
       {/* 3. CLIENTS TABLE */}
-      <div className="rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
+      <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full min-w-[640px] text-left text-xs">
             <thead>
               <tr className="border-b border-[#e8e8e3] bg-[#fafaf8] font-display text-[10px] font-bold uppercase text-muted">
                 <th className="px-5 py-3">Client & Company</th>
@@ -336,8 +336,8 @@ export default function ClientsPage() {
 
       {/* 4. NEW CLIENT MODAL */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-[#e8e8e3]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
               <div>
                 <h3 className="display text-xl font-bold text-ink">Add New Client</h3>
@@ -352,7 +352,7 @@ export default function ClientsPage() {
             </div>
 
             <form onSubmit={handleCreateClient} className="mt-4 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">
                     Contact Person Name *
@@ -381,7 +381,7 @@ export default function ClientsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">
                     Email Address *
@@ -408,7 +408,7 @@ export default function ClientsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Status</label>
                   <select

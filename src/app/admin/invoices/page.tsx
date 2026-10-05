@@ -283,11 +283,11 @@ export default function InvoicesPage() {
       </div>
 
       {/* 4. INVOICES TABLE */}
-      <div className="rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
+      <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full min-w-[700px] text-left text-xs">
             <thead>
-              <tr className="border-b border-[#e8e8e3] bg-[#fafaf8] font-mono text-[10px] font-bold uppercase text-muted">
+              <tr className="border-b border-[#e8e8e3] bg-[#fafaf8] text-[10px] font-bold uppercase tracking-wider text-muted">
                 <th className="px-5 py-3">Invoice #</th>
                 <th className="px-4 py-3">Client</th>
                 <th className="px-4 py-3">Due Date</th>
@@ -313,7 +313,7 @@ export default function InvoicesPage() {
               ) : (
                 filtered.map((inv) => (
                   <tr key={inv._id} className="hover:bg-[#fbfbfa] transition">
-                    <td className="px-5 py-3.5 font-mono font-bold text-ink">
+                    <td className="px-5 py-3.5 font-bold text-ink">
                       #{inv.invoiceNumber}
                     </td>
                     <td className="px-4 py-3.5">
@@ -375,8 +375,8 @@ export default function InvoicesPage() {
 
       {/* 5. CREATE INVOICE MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl border border-[#e8e8e3]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
               <div>
                 <h3 className="display text-xl font-bold text-ink">Generate Studio Invoice</h3>
@@ -391,7 +391,7 @@ export default function InvoicesPage() {
             </div>
 
             <form onSubmit={handleCreateInvoice} className="mt-4 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Client *</label>
                   <select
@@ -426,7 +426,7 @@ export default function InvoicesPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Issue Date</label>
                   <input
@@ -463,9 +463,9 @@ export default function InvoicesPage() {
               {/* Line items */}
               <div>
                 <label className="block font-bold text-ink mb-2">Line Items</label>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {formItems.map((item, idx) => (
-                    <div key={idx} className="flex gap-2 items-center">
+                    <div key={idx} className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center p-2 sm:p-0 rounded-xl bg-[#fbfbfa] sm:bg-transparent border sm:border-0 border-[#e8e8e3]">
                       <input
                         type="text"
                         value={item.description}
@@ -475,39 +475,42 @@ export default function InvoicesPage() {
                           setFormItems(updated);
                         }}
                         placeholder="Description of service / equipment"
-                        className="flex-1 rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] px-3 py-2 text-ink focus:border-orange focus:bg-white focus:outline-none"
+                        className="flex-1 rounded-xl border border-[#e8e8e3] bg-white sm:bg-[#fbfbfa] px-3 py-2 text-ink focus:border-orange focus:bg-white focus:outline-none"
                       />
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) => {
-                          const updated = [...formItems];
-                          updated[idx].quantity = parseInt(e.target.value) || 1;
-                          setFormItems(updated);
-                        }}
-                        className="w-16 rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] px-3 py-2 text-ink focus:border-orange focus:bg-white focus:outline-none"
-                      />
-                      <input
-                        type="number"
-                        value={item.unitPrice}
-                        onChange={(e) => {
-                          const updated = [...formItems];
-                          updated[idx].unitPrice = parseFloat(e.target.value) || 0;
-                          setFormItems(updated);
-                        }}
-                        placeholder="Rate ₹"
-                        className="w-28 rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] px-3 py-2 text-ink focus:border-orange focus:bg-white focus:outline-none"
-                      />
-                      {formItems.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => setFormItems(formItems.filter((_, i) => i !== idx))}
-                          className="p-1.5 text-muted hover:text-red-600"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      )}
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          min="1"
+                          value={item.quantity}
+                          onChange={(e) => {
+                            const updated = [...formItems];
+                            updated[idx].quantity = parseInt(e.target.value) || 1;
+                            setFormItems(updated);
+                          }}
+                          placeholder="Qty"
+                          className="w-20 rounded-xl border border-[#e8e8e3] bg-white sm:bg-[#fbfbfa] px-3 py-2 text-ink focus:border-orange focus:bg-white focus:outline-none text-center"
+                        />
+                        <input
+                          type="number"
+                          value={item.unitPrice}
+                          onChange={(e) => {
+                            const updated = [...formItems];
+                            updated[idx].unitPrice = parseFloat(e.target.value) || 0;
+                            setFormItems(updated);
+                          }}
+                          placeholder="Rate ₹"
+                          className="flex-1 sm:w-32 rounded-xl border border-[#e8e8e3] bg-white sm:bg-[#fbfbfa] px-3 py-2 text-ink focus:border-orange focus:bg-white focus:outline-none"
+                        />
+                        {formItems.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => setFormItems(formItems.filter((_, i) => i !== idx))}
+                            className="p-2 text-muted hover:text-red-600 rounded-lg hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   ))}
                   <button

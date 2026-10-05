@@ -175,7 +175,7 @@ export default function LeadsPage() {
       {/* 1. TOP HEADER */}
       <div className="flex flex-col justify-between gap-4 border-b border-[#e8e8e3] pb-5 sm:flex-row sm:items-center">
         <div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-orange">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-orange">
             Sales Pipeline · Opportunity Tracking
           </span>
           <h1 className="display text-3xl font-extrabold text-ink">
@@ -341,17 +341,18 @@ export default function LeadsPage() {
         </div>
       ) : (
         /* Table View */
-        <div className="rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
-          <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="border-b border-[#e8e8e3] bg-[#fafaf8] font-mono text-[10px] font-bold uppercase text-muted">
-                <th className="px-5 py-3">Lead & Company</th>
-                <th className="px-4 py-3">Service & Budget</th>
-                <th className="px-4 py-3">Stage</th>
-                <th className="px-4 py-3">Contact</th>
-                <th className="px-4 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
+        <div className="rounded-2xl sm:rounded-3xl border border-[#e8e8e3] bg-white shadow-xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[650px] text-left text-xs">
+              <thead>
+                <tr className="border-b border-[#e8e8e3] bg-[#fafaf8] text-[10px] font-bold uppercase tracking-wider text-muted">
+                  <th className="px-5 py-3">Lead & Company</th>
+                  <th className="px-4 py-3">Service & Budget</th>
+                  <th className="px-4 py-3">Stage</th>
+                  <th className="px-4 py-3">Contact</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
             <tbody className="divide-y divide-[#f0f0eb]">
               {filtered.map((lead) => (
                 <tr key={lead._id} className="hover:bg-[#fbfbfa]">
@@ -386,13 +387,14 @@ export default function LeadsPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 
       {/* 4. NEW LEAD MODAL */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-[#e8e8e3]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
             <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
               <div>
                 <h3 className="display text-xl font-bold text-ink">Create New Lead</h3>
@@ -407,7 +409,7 @@ export default function LeadsPage() {
             </div>
 
             <form onSubmit={handleCreateLead} className="mt-4 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Lead Name *</label>
                   <input
@@ -431,7 +433,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Email *</label>
                   <input
@@ -455,7 +457,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Service</label>
                   <select
