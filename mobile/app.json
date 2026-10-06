@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "WasShot Media",
+    "slug": "wasshot-media",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#111110"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.wasshotmedia.app"
+    },
+    "android": {
+      "package": "com.wasshotmedia.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#111110",
+        "foregroundImage": "./assets/icon.png"
+      },
+      "predictiveBackGestureEnabled": false
+    }
+  }
+}

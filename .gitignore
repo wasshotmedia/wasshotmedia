@@ -48,3 +48,12 @@ android/build/
 android/app/build/
 android/capacitor-cordova-android-plugins/build/
 android/local.properties
+
+# mobile react native builds
+mobile/node_modules/
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/android/local.properties
+mobile/android/.cxx/
+
