@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">WasShot Media</string>
+    <string name="title_activity_main">WasShot Media</string>
+    <string name="package_name">com.wasshotmedia.app</string>
+    <string name="custom_url_scheme">com.wasshotmedia.app</string>
+</resources>
