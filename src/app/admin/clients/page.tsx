@@ -93,25 +93,31 @@ export default function ClientsPage() {
 
   const handleCreateClient = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formName.trim()) {
+      alert("Please enter the contact person's name.");
+      return;
+    }
     setSaving(true);
     try {
       const res = await fetch("/api/admin/clients", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: formName,
-          company: formCompany,
-          email: formEmail,
-          phone: formPhone,
+          name: formName.trim(),
+          company: formCompany.trim(),
+          business: formCompany.trim(),
+          email: formEmail.trim(),
+          phone: formPhone.trim(),
           status: formStatus,
-          city: formCity,
-          notes: formNotes,
+          city: formCity.trim(),
+          notes: formNotes.trim(),
         }),
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        alert(data.error || "Failed to create client");
+        const data = await res.json().catch(() => ({}));
+        const msg = data.error || (data.issues ? JSON.stringify(data.issues) : "Failed to create client");
+        alert(`Failed to create client: ${msg}`);
         return;
       }
 
@@ -336,14 +342,16 @@ export default function ClientsPage() {
 
       {/* 4. NEW CLIENT MODAL */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4">
-          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
-            <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-3 sm:p-4">
+          <div className="relative flex flex-col w-full max-w-lg max-h-[92vh] rounded-2xl sm:rounded-3xl bg-white shadow-2xl border border-[#e8e8e3] overflow-hidden animate-in zoom-in-95 duration-150">
+            {/* Header (Sticky at top) */}
+            <div className="flex items-center justify-between border-b border-[#e8e8e3] px-5 py-4 bg-white shrink-0">
               <div>
                 <h3 className="display text-xl font-bold text-ink">Add New Client</h3>
                 <p className="text-xs text-muted">Create a new client CRM profile</p>
               </div>
               <button
+                type="button"
                 onClick={() => setShowModal(false)}
                 className="rounded-full p-1.5 text-muted hover:bg-black/[0.05]"
               >
@@ -351,7 +359,8 @@ export default function ClientsPage() {
               </button>
             </div>
 
-            <form onSubmit={handleCreateClient} className="mt-4 space-y-4 text-xs">
+            {/* Scrollable Form Body */}
+            <form id="createClientForm" onSubmit={handleCreateClient} className="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">
@@ -446,24 +455,26 @@ export default function ClientsPage() {
                   className="w-full rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] p-2.5 text-ink focus:border-orange focus:bg-white focus:outline-none"
                 />
               </div>
-
-              <div className="flex justify-end gap-3 pt-3 border-t border-[#e8e8e3]">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="rounded-full border border-[#e8e8e3] px-4 py-2 font-semibold text-muted hover:text-ink"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="rounded-full bg-orange px-5 py-2 font-bold text-white shadow-xs hover:bg-[#e03d07] disabled:opacity-50"
-                >
-                  {saving ? "Creating..." : "Create Client →"}
-                </button>
-              </div>
             </form>
+
+            {/* Sticky Action Footer */}
+            <div className="flex items-center justify-end gap-3 border-t border-[#e8e8e3] px-5 py-3.5 bg-[#fafaf8] shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="rounded-full border border-[#e8e8e3] bg-white px-5 py-2 font-semibold text-muted hover:text-ink transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="createClientForm"
+                disabled={saving}
+                className="rounded-full bg-orange px-6 py-2 font-bold text-white shadow-xs hover:bg-[#e03d07] disabled:opacity-50 transition"
+              >
+                {saving ? "Creating..." : "Create Client →"}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -39,6 +39,7 @@ export const clientSchema = z
   })
   .transform((data) => ({
     ...data,
+    company: data.company || data.business,
     business: data.business || data.company,
   }));
 
@@ -141,34 +142,53 @@ export const eventSchema = z
   })
   .transform((data) => ({
     ...data,
+    clientId: data.clientId && data.clientId.trim() !== "" ? data.clientId : undefined,
+    projectId: data.projectId && data.projectId.trim() !== "" ? data.projectId : undefined,
     assignedTeam:
       data.assignedTeam && data.assignedTeam.length > 0
-        ? data.assignedTeam
-        : data.assignedTo || [],
+        ? data.assignedTeam.filter(Boolean)
+        : (data.assignedTo || []).filter(Boolean),
     mapLink: data.mapLink || data.locationUrl,
   }));
 
-export const invoiceSchema = z.object({
-  clientId: z.string().min(1),
-  projectId: z.string().optional().or(z.literal("")),
-  items: z
-    .array(
-      z.object({
-        description: z.string().min(1),
-        quantity: z.number().positive(),
-        price: z.number().nonnegative(),
-      }),
-    )
-    .min(1),
-  discount: z.number().nonnegative().optional(),
-  taxRate: z.number().nonnegative().optional(),
-  paid: z.number().nonnegative().optional(),
-  dueDate: z.string().optional().or(z.literal("")),
-  status: z
-    .enum(["draft", "issued", "partially_paid", "paid", "overdue", "cancelled"])
-    .optional(),
-  notes: z.string().optional().or(z.literal("")),
-});
+export const invoiceSchema = z
+  .object({
+    clientId: z.string().min(1),
+    projectId: z.string().optional().or(z.literal("")),
+    items: z
+      .array(
+        z.object({
+          description: z.string().min(1),
+          quantity: z.number().positive(),
+          price: z.number().nonnegative().optional(),
+          unitPrice: z.number().nonnegative().optional(),
+          amount: z.number().nonnegative().optional(),
+        }),
+      )
+      .min(1),
+    discount: z.number().nonnegative().optional(),
+    taxRate: z.number().nonnegative().optional(),
+    paid: z.number().nonnegative().optional(),
+    dueDate: z.string().optional().or(z.literal("")),
+    status: z
+      .enum(["draft", "issued", "partially_paid", "paid", "overdue", "cancelled"])
+      .optional(),
+    notes: z.string().optional().or(z.literal("")),
+  })
+  .transform((data) => ({
+    ...data,
+    projectId: data.projectId && data.projectId.trim() !== "" ? data.projectId : undefined,
+    items: data.items.map((it) => {
+      const rate = it.price ?? it.unitPrice ?? 0;
+      return {
+        description: it.description,
+        quantity: it.quantity,
+        price: rate,
+        unitPrice: rate,
+        amount: it.amount ?? (it.quantity * rate),
+      };
+    }),
+  }));
 
 export const cmsServiceSchema = z.object({
   title: z.string().min(2),

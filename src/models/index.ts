@@ -23,11 +23,14 @@ const userSchema = new Schema(
 const clientSchema = new Schema(
   {
     name: { type: String, required: true },
+    company: String,
     contactPerson: String,
     email: String,
     phone: String,
     whatsapp: String,
     business: String,
+    city: String,
+    status: { type: String, default: "active" },
     website: String,
     socialLinks: {
       instagram: String,
@@ -39,7 +42,7 @@ const clientSchema = new Schema(
   },
   { timestamps: true },
 );
-clientSchema.index({ name: "text", email: "text", business: "text" });
+clientSchema.index({ name: "text", email: "text", business: "text", company: "text" });
 
 const leadSchema = new Schema(
   {
@@ -191,6 +194,7 @@ const notificationSchema = new Schema(
 const invoiceSchema = new Schema(
   {
     number: { type: String, required: true, unique: true },
+    invoiceNumber: String,
     clientId: { type: Schema.Types.ObjectId, ref: "Client", required: true },
     projectId: { type: Schema.Types.ObjectId, ref: "Project" },
     items: [
@@ -198,6 +202,8 @@ const invoiceSchema = new Schema(
         description: String,
         quantity: Number,
         price: Number,
+        unitPrice: Number,
+        amount: Number,
       },
     ],
     discount: { type: Number, default: 0 },

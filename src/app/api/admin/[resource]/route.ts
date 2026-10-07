@@ -51,6 +51,7 @@ const collections = {
   reminders: { model: Reminder, schema: null },
   notifications: { model: Notification, schema: null },
   users: { model: User, schema: null },
+  team: { model: User, schema: null },
   payments: { model: Payment, schema: null },
   events: { model: CalendarEvent, schema: null },
   invoices: { model: Invoice, schema: null },
@@ -102,6 +103,11 @@ export async function GET(
 
     if (raw === "events") {
       const items = localStore.find("events");
+      return json({ items });
+    }
+
+    if (raw === "team") {
+      const items = localStore.find("users");
       return json({ items });
     }
 
@@ -176,7 +182,7 @@ export async function GET(
     ];
   }
   let query = (model as any).find(filter).sort({ createdAt: -1 }).limit(200);
-  if (resource === "users") {
+  if (resource === "users" || resource === "team") {
     query = User.find({ isActive: true }).select("-passwordHash").sort({ name: 1 }) as any;
   }
   const items = await query;
@@ -333,13 +339,36 @@ async function listEvents(request: NextRequest) {
       ...(to ? { $lte: new Date(to) } : {}),
     };
   }
-  const items = await CalendarEvent.find(filter).sort({ start: 1 }).limit(500);
-  return json({ items: lean(items) });
+  const items = await CalendarEvent.find(filter)
+    .populate("clientId", "name company email")
+    .populate("assignedTeam", "name email role title")
+    .sort({ start: 1 })
+    .limit(500)
+    .lean();
+
+  const normalized = (items || []).map((ev: any) => ({
+    ...ev,
+    client: ev.clientId && typeof ev.clientId === "object" ? ev.clientId : ev.client,
+    assignedTo: ev.assignedTeam || ev.assignedTo || [],
+  }));
+  return json({ items: lean(normalized) });
 }
 
 async function listInvoices() {
-  const items = await Invoice.find().sort({ createdAt: -1 }).limit(200);
-  return json({ items: lean(items) });
+  const items = await Invoice.find()
+    .populate("clientId", "name company email phone")
+    .populate("projectId", "name title")
+    .sort({ createdAt: -1 })
+    .limit(200)
+    .lean();
+
+  const normalized = (items || []).map((inv: any) => ({
+    ...inv,
+    invoiceNumber: inv.invoiceNumber || inv.number || "WSM-INV",
+    client: inv.clientId && typeof inv.clientId === "object" ? inv.clientId : inv.client,
+    project: inv.projectId && typeof inv.projectId === "object" ? inv.projectId : inv.project,
+  }));
+  return json({ items: lean(normalized) });
 }
 
 async function createEvent(
@@ -353,13 +382,19 @@ async function createEvent(
     if (!parsed.success) return errorJson("Invalid event", 400, { issues: parsed.error.flatten() });
     const start = new Date(parsed.data.start);
     const end = new Date(parsed.data.end);
-    const assigned = parsed.data.assignedTeam || [];
-    const existingDocs = await CalendarEvent.find({
-      status: { $ne: "cancelled" },
-      assignedTeam: { $in: assigned.filter(Boolean) },
-      start: { $lt: end },
-      end: { $gt: start },
-    });
+
+    const rawAssigned = parsed.data.assignedTeam || [];
+    const assigned = rawAssigned.filter((id) => id && mongoose.Types.ObjectId.isValid(id));
+
+    const existingDocs = assigned.length > 0
+      ? await CalendarEvent.find({
+          status: { $ne: "cancelled" },
+          assignedTeam: { $in: assigned },
+          start: { $lt: end },
+          end: { $gt: start },
+        })
+      : [];
+
     const existing = existingDocs.flatMap((event) =>
       (event.assignedTeam || []).map((userId) => ({
         userId: String(userId),
@@ -384,20 +419,37 @@ async function createEvent(
         });
       }
     }
-    const created = await CalendarEvent.create({
+
+    const validClientId = parsed.data.clientId && mongoose.Types.ObjectId.isValid(parsed.data.clientId)
+      ? parsed.data.clientId
+      : undefined;
+    const validProjectId = parsed.data.projectId && mongoose.Types.ObjectId.isValid(parsed.data.projectId)
+      ? parsed.data.projectId
+      : undefined;
+
+    const eventPayload: Record<string, unknown> = {
       ...parsed.data,
       start,
       end,
+      assignedTeam: assigned,
       conflictOverride: Boolean(parsed.data.overrideConflict && check.conflicts.length),
       conflictOverrideBy: parsed.data.overrideConflict ? session.id : undefined,
-    });
+    };
+    if (validClientId) eventPayload.clientId = validClientId;
+    else delete eventPayload.clientId;
+    if (validProjectId) eventPayload.projectId = validProjectId;
+    else delete eventPayload.projectId;
+
+    const created = await CalendarEvent.create(eventPayload);
     if (created.status === "confirmed" || created.status === "scheduled") {
-      await syncEventReminders({
-        eventId: String(created._id),
-        start,
-        assignedTeam: assigned,
-        offsets: parsed.data.reminderOffsets,
-      });
+      if (assigned.length > 0) {
+        await syncEventReminders({
+          eventId: String(created._id),
+          start,
+          assignedTeam: assigned,
+          offsets: parsed.data.reminderOffsets,
+        }).catch((e) => console.warn("Failed to sync reminders", e));
+      }
     }
     await logActivity(session, "create:event", "events", String(created._id));
     return json({ item: lean(created), conflictOverridden: created.conflictOverride }, { status: 201 });
@@ -411,36 +463,52 @@ async function createInvoice(
   body: Record<string, unknown>,
   session: SessionUser,
 ) {
-  const { invoiceSchema } = await import("@/lib/validators");
-  const parsed = invoiceSchema.safeParse(body);
-  if (!parsed.success) return errorJson("Invalid invoice", 400, { issues: parsed.error.flatten() });
-  const totals = invoiceTotals({
-    items: parsed.data.items,
-    discount: parsed.data.discount,
-    taxRate: parsed.data.taxRate,
-    paid: parsed.data.paid,
-  });
-  const count = await Invoice.countDocuments();
-  const number = `WSM-${new Date().getFullYear()}-${String(count + 1).padStart(4, "0")}`;
-  const status = deriveInvoiceStatus({
-    current: parsed.data.status || "draft",
-    total: totals.total,
-    paid: totals.paid,
-    dueDate: parsed.data.dueDate ? new Date(parsed.data.dueDate) : null,
-  });
-  const created = await Invoice.create({
-    number,
-    clientId: parsed.data.clientId,
-    projectId: parsed.data.projectId || undefined,
-    items: parsed.data.items,
-    taxRate: parsed.data.taxRate || 0,
-    ...totals,
-    dueDate: parsed.data.dueDate ? new Date(parsed.data.dueDate) : undefined,
-    status,
-    notes: parsed.data.notes,
-  });
-  await logActivity(session, "create:invoice", "invoices", String(created._id));
-  return json({ item: lean(created) }, { status: 201 });
+  try {
+    const { invoiceSchema } = await import("@/lib/validators");
+    const parsed = invoiceSchema.safeParse(body);
+    if (!parsed.success) return errorJson("Invalid invoice", 400, { issues: parsed.error.flatten() });
+    const totals = invoiceTotals({
+      items: parsed.data.items,
+      discount: parsed.data.discount,
+      taxRate: parsed.data.taxRate,
+      paid: parsed.data.paid,
+    });
+    const count = await Invoice.countDocuments();
+    const number = `WSM-${new Date().getFullYear()}-${String(count + 1).padStart(4, "0")}`;
+    const status = deriveInvoiceStatus({
+      current: parsed.data.status || "draft",
+      total: totals.total,
+      paid: totals.paid,
+      dueDate: parsed.data.dueDate ? new Date(parsed.data.dueDate) : null,
+    });
+
+    const validClientId = parsed.data.clientId && mongoose.Types.ObjectId.isValid(parsed.data.clientId)
+      ? parsed.data.clientId
+      : undefined;
+    const validProjectId = parsed.data.projectId && mongoose.Types.ObjectId.isValid(parsed.data.projectId)
+      ? parsed.data.projectId
+      : undefined;
+
+    const invoicePayload: Record<string, unknown> = {
+      number,
+      invoiceNumber: number,
+      clientId: validClientId || parsed.data.clientId,
+      items: parsed.data.items,
+      taxRate: parsed.data.taxRate || 0,
+      ...totals,
+      dueDate: parsed.data.dueDate ? new Date(parsed.data.dueDate) : undefined,
+      status,
+      notes: parsed.data.notes,
+    };
+    if (validProjectId) invoicePayload.projectId = validProjectId;
+
+    const created = await Invoice.create(invoicePayload);
+    await logActivity(session, "create:invoice", "invoices", String(created._id));
+    return json({ item: lean(created) }, { status: 201 });
+  } catch (err: any) {
+    console.error("createInvoice error:", err);
+    return errorJson(err.message || "Failed to create invoice", 500);
+  }
 }
 
 export const runtime = "nodejs";

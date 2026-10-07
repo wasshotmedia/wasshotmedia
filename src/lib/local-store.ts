@@ -260,7 +260,7 @@ function getInitialStore(): StudioStoreData {
 
 class StudioLocalStore {
   private data: StudioStoreData | null = null;
-  private saveTimeout: NodeJS.Timeout | null = null;
+  private saveTimeout: any = null;
   private lastLoadedMtime = 0;
 
   constructor() {

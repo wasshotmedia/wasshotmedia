@@ -111,21 +111,38 @@ export default function InvoicesPage() {
           projectId: formProjectId || undefined,
           issueDate: new Date(formIssueDate).toISOString(),
           dueDate: new Date(formDueDate).toISOString(),
-          items: formItems.map((item) => ({
-            ...item,
-            amount: item.quantity * item.unitPrice,
-          })),
+          items: formItems.map((item) => {
+            const qty = Number(item.quantity) || 1;
+            const rate = Number(item.unitPrice) || 0;
+            return {
+              description: item.description,
+              quantity: qty,
+              unitPrice: rate,
+              price: rate,
+              amount: qty * rate,
+            };
+          }),
           taxRate: formTaxRate,
           notes: formNotes,
         }),
       });
 
-      if (res.ok) {
-        await loadData();
-        setShowCreateModal(false);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        const msg = data.error || (data.issues ? JSON.stringify(data.issues) : "Failed to create invoice");
+        alert(`Failed to create invoice: ${msg}`);
+        return;
       }
-    } catch (err) {
-      console.error("Failed to create invoice", err);
+
+      await loadData();
+      setShowCreateModal(false);
+      setFormClientId("");
+      setFormProjectId("");
+      setFormItems([
+        { description: "Cinematography & 4K Production", quantity: 1, unitPrice: 45000 },
+      ]);
+    } catch (err: any) {
+      alert(err.message || "Failed to create invoice");
     } finally {
       setSaving(false);
     }
@@ -137,24 +154,42 @@ export default function InvoicesPage() {
 
     setRecordingPayment(true);
     try {
-      const res = await fetch(`/api/admin/invoices/${selectedInvoice._id}/payment`, {
+      let res = await fetch(`/api/admin/invoices/${selectedInvoice._id}/payment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: parseFloat(paymentAmount),
           paymentMethod,
+          method: paymentMethod,
           reference: paymentRef,
         }),
       });
+
+      if (!res.ok) {
+        res = await fetch(`/api/admin/invoices/${selectedInvoice._id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "payment",
+            amount: parseFloat(paymentAmount),
+            paymentMethod,
+            method: paymentMethod,
+            reference: paymentRef,
+          }),
+        });
+      }
 
       if (res.ok) {
         await loadData();
         setSelectedInvoice(null);
         setPaymentAmount("");
         setPaymentRef("");
+      } else {
+        const d = await res.json().catch(() => ({}));
+        alert(d.error || "Failed to record payment");
       }
-    } catch (err) {
-      console.error("Failed to record payment", err);
+    } catch (err: any) {
+      alert(err.message || "Failed to record payment");
     } finally {
       setRecordingPayment(false);
     }
@@ -170,7 +205,7 @@ export default function InvoicesPage() {
     if (filterStatus !== "all" && inv.status !== filterStatus) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      const matchNum = inv.invoiceNumber?.toLowerCase().includes(q);
+      const matchNum = (inv.invoiceNumber || (inv as any).number || "").toLowerCase().includes(q);
       const matchClient = inv.client?.name?.toLowerCase().includes(q);
       if (!matchNum && !matchClient) return false;
     }
@@ -314,7 +349,7 @@ export default function InvoicesPage() {
                 filtered.map((inv) => (
                   <tr key={inv._id} className="hover:bg-[#fbfbfa] transition">
                     <td className="px-5 py-3.5 font-bold text-ink">
-                      #{inv.invoiceNumber}
+                      #{inv.invoiceNumber || (inv as any).number || "INV"}
                     </td>
                     <td className="px-4 py-3.5">
                       <p className="font-bold text-ink">{inv.client?.name || "Client"}</p>
@@ -375,14 +410,16 @@ export default function InvoicesPage() {
 
       {/* 5. CREATE INVOICE MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
-            <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-3 sm:p-4">
+          <div className="relative flex flex-col w-full max-w-2xl max-h-[92vh] rounded-2xl sm:rounded-3xl bg-white shadow-2xl border border-[#e8e8e3] overflow-hidden animate-in zoom-in-95 duration-150">
+            {/* Header (Sticky at top) */}
+            <div className="flex items-center justify-between border-b border-[#e8e8e3] px-5 py-4 bg-white shrink-0">
               <div>
                 <h3 className="display text-xl font-bold text-ink">Generate Studio Invoice</h3>
                 <p className="text-xs text-muted">Create client bill with GST breakdown and banking info</p>
               </div>
               <button
+                type="button"
                 onClick={() => setShowCreateModal(false)}
                 className="rounded-full p-1.5 text-muted hover:bg-black/[0.05]"
               >
@@ -390,7 +427,8 @@ export default function InvoicesPage() {
               </button>
             </div>
 
-            <form onSubmit={handleCreateInvoice} className="mt-4 space-y-4 text-xs">
+            {/* Scrollable Form Body */}
+            <form id="createInvoiceForm" onSubmit={handleCreateInvoice} className="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-bold text-ink mb-1">Client *</label>
@@ -537,24 +575,26 @@ export default function InvoicesPage() {
                   className="w-full rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] p-2.5 text-ink focus:border-orange focus:bg-white focus:outline-none"
                 />
               </div>
-
-              <div className="flex justify-end gap-3 pt-3 border-t border-[#e8e8e3]">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateModal(false)}
-                  className="rounded-full border border-[#e8e8e3] px-4 py-2 font-semibold text-muted hover:text-ink"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="rounded-full bg-orange px-5 py-2 font-bold text-white shadow-xs hover:bg-[#e03d07] disabled:opacity-50"
-                >
-                  {saving ? "Creating..." : "Generate Invoice →"}
-                </button>
-              </div>
             </form>
+
+            {/* Sticky Action Footer */}
+            <div className="flex items-center justify-end gap-3 border-t border-[#e8e8e3] px-5 py-3.5 bg-[#fafaf8] shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowCreateModal(false)}
+                className="rounded-full border border-[#e8e8e3] bg-white px-5 py-2 font-semibold text-muted hover:text-ink transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="createInvoiceForm"
+                disabled={saving}
+                className="rounded-full bg-orange px-6 py-2 font-bold text-white shadow-xs hover:bg-[#e03d07] disabled:opacity-50 transition"
+              >
+                {saving ? "Creating..." : "Generate Invoice →"}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -567,7 +607,7 @@ export default function InvoicesPage() {
               <div>
                 <h3 className="display text-xl font-bold text-ink">Record Payment</h3>
                 <p className="text-xs text-muted">
-                  Invoice #{selectedInvoice.invoiceNumber} · Balance:{" "}
+                  Invoice #{selectedInvoice.invoiceNumber || (selectedInvoice as any).number || "INV"} · Balance:{" "}
                   <strong>{formatMoney(selectedInvoice.balance)}</strong>
                 </p>
               </div>

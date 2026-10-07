@@ -114,6 +114,11 @@ export default function CalendarPage() {
     }
   };
 
+  const toLocalDatetimeInput = (d: Date) => {
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+
   // Open Schedule Modal for a new shoot or event
   const handleOpenNewModal = (defaultDateStr?: string) => {
     setIsEditing(false);
@@ -127,10 +132,10 @@ export default function CalendarPage() {
     // Default start to next hour
     now.setMinutes(0, 0, 0);
     now.setHours(now.getHours() + 1);
-    const startStr = now.toISOString().slice(0, 16);
+    const startStr = toLocalDatetimeInput(now);
 
     const end = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-    const endStr = end.toISOString().slice(0, 16);
+    const endStr = toLocalDatetimeInput(end);
 
     setFormStart(startStr);
     setFormEnd(endStr);
@@ -152,8 +157,8 @@ export default function CalendarPage() {
     setFormType(ev.type);
     setFormClientId(ev.client?._id || "");
     setFormProjectId(ev.project?._id || "");
-    setFormStart(ev.start ? new Date(ev.start).toISOString().slice(0, 16) : "");
-    setFormEnd(ev.end ? new Date(ev.end).toISOString().slice(0, 16) : "");
+    setFormStart(ev.start ? toLocalDatetimeInput(new Date(ev.start)) : "");
+    setFormEnd(ev.end ? toLocalDatetimeInput(new Date(ev.end)) : "");
     setFormAssignedTo((ev.assignedTo || []).map((u: any) => u._id || u));
     setFormLocation(ev.location || "Vijayawada");
     setFormLocationUrl(ev.locationUrl || "");
@@ -903,9 +908,10 @@ export default function CalendarPage() {
 
       {/* 5. SCHEDULE / EDIT SHOOT MODAL */}
       {showScheduleModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-6 shadow-2xl border border-[#e8e8e3]">
-            <div className="flex items-center justify-between border-b border-[#e8e8e3] pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-3 sm:p-4">
+          <div className="relative flex flex-col w-full max-w-2xl max-h-[92vh] rounded-2xl sm:rounded-3xl bg-white shadow-2xl border border-[#e8e8e3] overflow-hidden animate-in zoom-in-95 duration-150">
+            {/* Header (Always Visible) */}
+            <div className="flex items-center justify-between border-b border-[#e8e8e3] px-5 py-4 bg-white shrink-0">
               <div>
                 <h3 className="display text-xl font-bold text-ink">
                   {isEditing ? "Edit Shoot / Event" : "Schedule New Shoot / Production"}
@@ -915,6 +921,7 @@ export default function CalendarPage() {
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => setShowScheduleModal(false)}
                 className="rounded-full p-1.5 text-muted hover:bg-black/[0.05]"
               >
@@ -922,12 +929,14 @@ export default function CalendarPage() {
               </button>
             </div>
 
+            {/* Scrollable Form Body */}
             <form
+              id="scheduleShootForm"
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSaveEvent(false);
               }}
-              className="mt-5 space-y-4 text-xs"
+              className="flex-1 overflow-y-auto p-5 space-y-4 text-xs"
             >
               <div>
                 <label className="block font-bold text-ink mb-1">
@@ -1010,34 +1019,38 @@ export default function CalendarPage() {
                 <label className="block font-bold text-ink mb-1">
                   Assign Team Crew (Praneeth / Wasim)
                 </label>
-                <div className="flex flex-wrap gap-3 pt-1">
-                  {teamMembers.map((member) => {
-                    const isAssigned = formAssignedTo.includes(member._id);
-                    return (
-                      <label
-                        key={member._id}
-                        className={`flex items-center gap-2 cursor-pointer rounded-xl border px-3 py-2 transition ${
-                          isAssigned
-                            ? "border-orange bg-orange/10 font-bold text-orange"
-                            : "border-[#e8e8e3] bg-[#fbfbfa] text-ink"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isAssigned}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setFormAssignedTo([...formAssignedTo, member._id]);
-                            } else {
-                              setFormAssignedTo(formAssignedTo.filter((id) => id !== member._id));
-                            }
-                          }}
-                          className="rounded text-orange focus:ring-orange"
-                        />
-                        <span>{member.name}</span>
-                      </label>
-                    );
-                  })}
+                <div className="flex flex-wrap gap-2.5 pt-1">
+                  {teamMembers.length > 0 ? (
+                    teamMembers.map((member) => {
+                      const isAssigned = formAssignedTo.includes(member._id);
+                      return (
+                        <label
+                          key={member._id}
+                          className={`flex items-center gap-2 cursor-pointer rounded-xl border px-3 py-2 transition ${
+                            isAssigned
+                              ? "border-orange bg-orange/10 font-bold text-orange"
+                              : "border-[#e8e8e3] bg-[#fbfbfa] text-ink hover:border-black/20"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isAssigned}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setFormAssignedTo([...formAssignedTo, member._id]);
+                              } else {
+                                setFormAssignedTo(formAssignedTo.filter((id) => id !== member._id));
+                              }
+                            }}
+                            className="rounded text-orange focus:ring-orange"
+                          />
+                          <span>{member.name}</span>
+                        </label>
+                      );
+                    })
+                  ) : (
+                    <span className="text-muted">Loading studio crew...</span>
+                  )}
                 </div>
               </div>
 
@@ -1101,24 +1114,26 @@ export default function CalendarPage() {
                   className="w-full rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] p-2.5 text-xs text-ink focus:border-orange focus:bg-white focus:outline-none"
                 />
               </div>
-
-              <div className="flex justify-end gap-3 pt-3 border-t border-[#e8e8e3]">
-                <button
-                  type="button"
-                  onClick={() => setShowScheduleModal(false)}
-                  className="rounded-full border border-[#e8e8e3] px-4 py-2 font-semibold text-muted hover:text-ink"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="rounded-full bg-orange px-5 py-2 font-bold text-white shadow-xs hover:bg-[#e03d07] disabled:opacity-50"
-                >
-                  {saving ? "Saving..." : isEditing ? "Update Shoot" : "Schedule Shoot →"}
-                </button>
-              </div>
             </form>
+
+            {/* Sticky Action Footer (Always Visible at bottom!) */}
+            <div className="flex items-center justify-end gap-3 border-t border-[#e8e8e3] px-5 py-3.5 bg-[#fafaf8] shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowScheduleModal(false)}
+                className="rounded-full border border-[#e8e8e3] bg-white px-5 py-2 font-semibold text-muted hover:text-ink transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="scheduleShootForm"
+                disabled={saving}
+                className="rounded-full bg-orange px-6 py-2 font-bold text-white shadow-xs hover:bg-[#e03d07] disabled:opacity-50 transition"
+              >
+                {saving ? "Saving..." : isEditing ? "Update Shoot" : "Schedule Shoot →"}
+              </button>
+            </div>
           </div>
         </div>
       )}

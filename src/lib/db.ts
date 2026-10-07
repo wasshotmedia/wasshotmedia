@@ -38,13 +38,13 @@ export async function connectDb(): Promise<typeof mongoose | null> {
     cache.promise = (async () => {
       try {
         const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("MongoDB connection timeout")), 1200)
+          setTimeout(() => reject(new Error("MongoDB connection timeout")), 6000)
         );
 
         const connectPromise = mongoose.connect(uri, {
           bufferCommands: false,
-          serverSelectionTimeoutMS: 1200,
-          connectTimeoutMS: 1200,
+          serverSelectionTimeoutMS: 5000,
+          connectTimeoutMS: 5000,
         });
 
         const conn = await Promise.race([connectPromise, timeoutPromise]);

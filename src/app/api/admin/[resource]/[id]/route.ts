@@ -229,6 +229,12 @@ export async function PATCH(
   if (!existing) return errorJson("Item not found", 404);
 
   if (resource === "events") {
+    if (body.clientId === "" || (body.clientId && !mongoose.Types.ObjectId.isValid(body.clientId))) {
+      delete body.clientId;
+    }
+    if (body.projectId === "" || (body.projectId && !mongoose.Types.ObjectId.isValid(body.projectId))) {
+      delete body.projectId;
+    }
     const start = body.start ? new Date(body.start) : existing.start;
     const end = body.end ? new Date(body.end) : existing.end;
     const assignedTeam = body.assignedTeam !== undefined ? body.assignedTeam : existing.assignedTeam;
@@ -315,8 +321,8 @@ export async function PATCH(
       await Payment.create({
         invoiceId: existing._id,
         amount,
-        method: body.method || "bank_transfer",
-        notes: body.notes || "",
+        method: body.paymentMethod || body.method || "bank_transfer",
+        notes: body.reference || body.notes || "",
         paidAt: body.paidAt ? new Date(body.paidAt) : new Date(),
       });
 

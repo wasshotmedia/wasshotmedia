@@ -28,7 +28,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={darkTheme}>
-        <StatusBar style="light" backgroundColor="#111110" />
+        <StatusBar style="light" />
         <Tab.Navigator
           screenOptions={({ route }) => ({
             headerShown: false,
