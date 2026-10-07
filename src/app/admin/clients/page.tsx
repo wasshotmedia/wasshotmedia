@@ -18,6 +18,8 @@ import {
   ShieldCheck,
   ChevronRight,
   Trash2,
+  Calendar,
+  Receipt,
 } from "lucide-react";
 import { formatMoney } from "@/lib/utils";
 
@@ -314,6 +316,22 @@ export default function ClientsPage() {
                       </td>
                       <td className="px-4 py-3.5 text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          <Link
+                            href={`/admin/clients/${client._id}`}
+                            className="inline-flex items-center gap-1 rounded-full border border-orange/30 bg-orange/5 px-2.5 py-1 text-xs font-bold text-orange hover:bg-orange hover:text-white transition"
+                            title="Schedule shoot or view sessions"
+                          >
+                            <Calendar className="h-3 w-3" />
+                            <span>Shoot</span>
+                          </Link>
+                          <Link
+                            href={`/admin/clients/${client._id}`}
+                            className="inline-flex items-center gap-1 rounded-full border border-[#e8e8e3] bg-white px-2.5 py-1 text-xs font-bold text-ink hover:border-black/40 hover:bg-[#fafaf8] transition"
+                            title="Generate invoice or view billings"
+                          >
+                            <Receipt className="h-3 w-3" />
+                            <span>Invoice</span>
+                          </Link>
                           <Link
                             href={`/admin/clients/${client._id}`}
                             className="inline-flex items-center gap-1 rounded-full border border-[#e8e8e3] bg-white px-3 py-1 font-semibold text-ink hover:border-black/30 hover:bg-[#fafaf8] transition"

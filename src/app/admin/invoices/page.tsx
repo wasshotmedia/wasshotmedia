@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Receipt,
   Search,
@@ -16,6 +17,8 @@ import {
   X,
   Trash2,
   ArrowRight,
+  Download,
+  MessageCircle,
 } from "lucide-react";
 import { formatMoney } from "@/lib/utils";
 
@@ -386,19 +389,57 @@ export default function InvoicesPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3.5 text-right">
-                      {inv.status !== "paid" && (
-                        <button
-                          suppressHydrationWarning
-                          onClick={() => {
-                            setSelectedInvoice(inv);
-                            setPaymentAmount(inv.balance ? inv.balance.toString() : inv.total.toString());
-                          }}
-                          className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-200 hover:bg-emerald-600 hover:text-white"
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Link
+                          href={`/invoice/${inv._id}`}
+                          className="inline-flex items-center gap-1 rounded-full bg-orange px-2.5 py-1 text-xs font-bold text-white hover:bg-[#e03d07] transition shadow-xs"
+                          title="View and download printable PDF"
                         >
-                          <CreditCard className="h-3 w-3" />
-                          <span>Record Payment</span>
-                        </button>
-                      )}
+                          <Download className="h-3 w-3" />
+                          <span>PDF</span>
+                        </Link>
+                        {(() => {
+                          const clientPhone = (inv.client as any)?.phone || "";
+                          const rawPhone = clientPhone.replace(/\D/g, "");
+                          const invNum = inv.invoiceNumber || (inv as any).number || "INV";
+                          const origin = typeof window !== "undefined" ? window.location.origin : "https://wasshot.in";
+                          const waMsg = encodeURIComponent(
+                            `Hi ${(inv.client as any)?.name || "Client"},\n\nHere is your official invoice #${invNum} from WasShot Media.\n\n` +
+                            `Total: ${formatMoney(inv.total)}\n` +
+                            `Status: ${inv.status === "paid" ? "PAID" : `Balance Due: ${formatMoney(inv.balance)}`}\n\n` +
+                            `View & Download PDF invoice here:\n${origin}/invoice/${inv._id}\n\n` +
+                            (inv.status !== "paid" ? `UPI ID: 7396986817@upi\n\n` : "") +
+                            `Thank you!`
+                          );
+                          const waUrl = rawPhone ? `https://wa.me/${rawPhone}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
+                          return (
+                            <a
+                              href={waUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 rounded-full border border-emerald-600/30 bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-800 hover:bg-emerald-600 hover:text-white transition"
+                              title="Share on WhatsApp"
+                            >
+                              <MessageCircle className="h-3 w-3" />
+                              <span className="hidden sm:inline">WhatsApp</span>
+                            </a>
+                          );
+                        })()}
+                        {inv.status !== "paid" && (
+                          <button
+                            suppressHydrationWarning
+                            onClick={() => {
+                              setSelectedInvoice(inv);
+                              setPaymentAmount(inv.balance ? inv.balance.toString() : inv.total.toString());
+                            }}
+                            className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 border border-emerald-200 hover:bg-emerald-600 hover:text-white transition"
+                            title="Record Payment"
+                          >
+                            <CreditCard className="h-3 w-3" />
+                            <span>Payment</span>
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
