@@ -13,7 +13,7 @@ import {
   Check,
   MessageCircle,
   Mail,
-  Building,
+  Send,
   CreditCard,
   QrCode,
   ExternalLink,
@@ -64,7 +64,10 @@ export default function PublicInvoicePage({
   const [invoice, setInvoice] = useState<InvoiceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedUpi, setCopiedUpi] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<string | null>(null);
 
   useEffect(() => {
     loadInvoice();
@@ -108,8 +111,44 @@ export default function PublicInvoicePage({
   const handleCopyLink = () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(currentUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2500);
+    }
+  };
+
+  const handleCopyUpi = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText("7396986817@ybl");
+      setCopiedUpi(true);
+      setTimeout(() => setCopiedUpi(false), 2500);
+    }
+  };
+
+  const handleSendInvoiceEmail = async () => {
+    if (!invoice?.client?.email) {
+      alert("No client email address is associated with this invoice.");
+      return;
+    }
+
+    setSendingEmail(true);
+    setEmailStatus(null);
+    try {
+      const res = await fetch(`/api/admin/invoices/${invoice._id}/send-email`, {
+        method: "POST",
+      });
+
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.error || "Failed to deliver email through mail service.");
+      }
+
+      const d = await res.json();
+      setEmailStatus(`Sent to ${invoice.client.email}!`);
+      setTimeout(() => setEmailStatus(null), 4000);
+    } catch (err: any) {
+      alert(`Email dispatch error: ${err.message}`);
+    } finally {
+      setSendingEmail(false);
     }
   };
 
@@ -161,14 +200,14 @@ export default function PublicInvoicePage({
   const balance = invoice.balance !== undefined ? invoice.balance : total;
   const isPaid = invoice.status === "paid" || balance === 0;
 
-  // Pre-formatted WhatsApp Message
+  // Pre-formatted WhatsApp Message with strict UPI ID 7396986817@ybl
   const waMessage = encodeURIComponent(
-    `Hi ${clientName},\n\nHere is your invoice #${invoiceNumber} from WasShot Media.\n\n` +
+    `Hi ${clientName},\n\nHere is your official invoice #${invoiceNumber} from WasShot Media.\n\n` +
     `Total Amount: ${formatMoney(total)}\n` +
-    `Status: ${isPaid ? "PAID" : `Balance Due: ${formatMoney(balance)}`}\n` +
+    `Status: ${isPaid ? "PAID IN FULL" : `Balance Due: ${formatMoney(balance)}`}\n` +
     `Due Date: ${dueDateFormatted}\n\n` +
     `View and Download your official PDF invoice here:\n${currentUrl}\n\n` +
-    (!isPaid ? `UPI ID for direct settlement: 7396986817@upi\n\n` : "") +
+    (!isPaid ? `UPI ID for direct settlement: 7396986817@ybl\n\n` : "") +
     `Thank you for working with WasShot Media!`
   );
 
@@ -180,8 +219,9 @@ export default function PublicInvoicePage({
     `Invoice #${invoiceNumber} from WasShot Media`
   )}&body=${waMessage}`;
 
-  const upiIntentUrl = `upi://pay?pa=7396986817@upi&pn=WasShot%20Media&am=${balance}&cu=INR&tn=Invoice%20${encodeURIComponent(invoiceNumber)}`;
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiIntentUrl)}`;
+  const upiId = "7396986817@ybl";
+  const upiIntentUrl = `upi://pay?pa=${upiId}&pn=WasShot%20Media&am=${balance}&cu=INR&tn=Invoice%20${encodeURIComponent(invoiceNumber)}`;
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiIntentUrl)}`;
 
   return (
     <div className="min-h-screen bg-[#f4f4f2] text-ink selection:bg-orange selection:text-white print:bg-white print:p-0">
@@ -211,15 +251,17 @@ export default function PublicInvoicePage({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            {/* Copy Link */}
             <button
               onClick={handleCopyLink}
               className="inline-flex items-center gap-1.5 rounded-full border border-[#e0e0dc] bg-white px-3 py-1.5 text-xs font-semibold text-ink hover:bg-black/[0.04] transition"
               title="Copy shareable link"
             >
-              {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
-              <span>{copied ? "Link Copied!" : "Copy Link"}</span>
+              {copiedLink ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+              <span>{copiedLink ? "Link Copied!" : "Copy Link"}</span>
             </button>
 
+            {/* Share WhatsApp */}
             <a
               href={waShareUrl}
               target="_blank"
@@ -231,15 +273,18 @@ export default function PublicInvoicePage({
               <span>Share WhatsApp</span>
             </a>
 
-            <a
-              href={mailtoUrl}
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#e0e0dc] bg-white px-3 py-1.5 text-xs font-semibold text-ink hover:bg-black/[0.04] transition"
-              title="Send via Email"
+            {/* 1-Tap Send Branded Email to Client */}
+            <button
+              onClick={handleSendInvoiceEmail}
+              disabled={sendingEmail}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#e0e0dc] bg-white px-3.5 py-1.5 text-xs font-semibold text-ink hover:border-orange hover:text-orange transition disabled:opacity-50"
+              title="Send branded invoice email directly to client's inbox"
             >
-              <Mail className="h-3.5 w-3.5 text-orange" />
-              <span className="hidden sm:inline">Email</span>
-            </a>
+              <Send className="h-3.5 w-3.5 text-orange" />
+              <span>{sendingEmail ? "Sending..." : emailStatus || "Email Client"}</span>
+            </button>
 
+            {/* Download PDF / Print */}
             <button
               onClick={handlePrint}
               className="inline-flex items-center gap-1.5 rounded-full bg-orange px-4 py-1.5 text-xs font-bold text-white hover:bg-[#e03d07] shadow-xs transition"
@@ -261,13 +306,16 @@ export default function PublicInvoicePage({
             </div>
           )}
 
-          {/* STUDIO BRAND HEADER */}
+          {/* STUDIO BRAND HEADER WITH OFFICIAL LOGO */}
           <div className="flex flex-col justify-between gap-6 border-b-2 border-ink pb-8 sm:flex-row sm:items-start">
             <div>
-              <div className="flex items-center gap-3">
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange text-white font-black text-xl shadow-md">
-                  W
-                </span>
+              <div className="flex items-center gap-4">
+                {/* Official WasShot Media Cinema Reel Logo */}
+                <img
+                  src="/brand/wasshotlogo.png"
+                  alt="WasShot Media Logo"
+                  className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl object-contain shadow-sm border border-[#e8e8e3] bg-black p-0.5"
+                />
                 <div>
                   <h1 className="font-display text-2xl sm:text-3xl font-black tracking-tight text-ink uppercase">
                     WasShot Media
@@ -410,7 +458,7 @@ export default function PublicInvoicePage({
                 </span>
                 <p className="leading-relaxed bg-[#f9f9f7] p-3 rounded-xl border border-[#ecece8]">
                   {invoice.notes ||
-                    "Payment due within 14 days of issue. High-res deliverables and raw reels will be unlocked upon final settlement."}
+                    "Payment due on receipt. High-res deliverables and raw master footage will be unlocked upon final settlement."}
                 </p>
               </div>
 
@@ -449,53 +497,62 @@ export default function PublicInvoicePage({
             </div>
           </div>
 
-          {/* BANKING & UPI PAYMENT DETAILS */}
-          <div className="mt-8 rounded-2xl border border-[#e0e0dc] bg-[#fafaf8] p-5 sm:p-6 print:border-ink print:bg-white">
+          {/* OFFICIAL UPI SETTLEMENT (NO BANK DETAILS - STRICTLY UPI ID 7396986817@ybl) */}
+          <div className="mt-8 rounded-2xl border border-orange/30 bg-[#fff9f6] p-5 sm:p-6 print:border-ink print:bg-white">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-              <div className="space-y-1.5 text-xs">
+              <div className="space-y-2 text-xs flex-1">
                 <div className="flex items-center gap-2">
-                  <CreditCard className="h-4 w-4 text-orange" />
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-orange text-white text-[11px] font-black">
+                    ₹
+                  </span>
                   <span className="font-display text-xs font-black uppercase tracking-wider text-ink">
-                    Official Payment & Settlement Details
+                    Official UPI Settlement
                   </span>
                 </div>
                 <p className="text-muted">
-                  Account Name: <strong className="text-ink font-semibold">WasShot Media</strong>
+                  Beneficiary Name: <strong className="text-ink font-semibold">WasShot Media</strong>
                 </p>
-                <p className="text-muted">
-                  Bank: <strong className="text-ink font-semibold">HDFC Bank</strong> · IFSC:{" "}
-                  <strong className="text-ink font-semibold">HDFC0001234</strong>
-                </p>
-                <p className="text-muted">
-                  A/C Number: <strong className="text-ink font-semibold font-mono">50200084920194</strong>
-                </p>
-                <p className="text-muted">
-                  UPI ID: <strong className="text-ink font-semibold font-mono">7396986817@upi</strong>
+                <div className="flex items-center gap-2 pt-1">
+                  <span className="text-muted font-medium">UPI ID:</span>
+                  <span className="font-mono text-sm sm:text-base font-extrabold text-orange bg-white px-3 py-1 rounded-lg border border-orange/30 shadow-2xs">
+                    {upiId}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleCopyUpi}
+                    className="rounded-lg border border-[#e0e0dc] bg-white px-2.5 py-1 text-[11px] font-bold text-ink hover:bg-black/[0.04] transition print:hidden"
+                    title="Copy UPI ID"
+                  >
+                    {copiedUpi ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+                <p className="text-[11px] text-muted pt-1">
+                  Supported via: <strong>Google Pay · PhonePe · Paytm · Cred · BHIM UPI</strong>
                 </p>
               </div>
 
               {/* UPI QR & Mobile 1-Tap Payment Button */}
               {!isPaid && balance > 0 && (
-                <div className="flex items-center gap-4 border-t sm:border-t-0 sm:border-l border-[#e5e5e0] pt-4 sm:pt-0 sm:pl-6">
+                <div className="flex items-center gap-4 border-t sm:border-t-0 sm:border-l border-orange/20 pt-4 sm:pt-0 sm:pl-6 shrink-0">
                   {/* QR Image */}
                   <div className="flex flex-col items-center">
                     <img
                       src={qrCodeUrl}
                       alt="Scan to Pay via UPI"
-                      className="h-24 w-24 rounded-lg border border-[#e0e0dc] bg-white p-1 shadow-xs"
+                      className="h-28 w-28 rounded-xl border border-orange/30 bg-white p-1.5 shadow-xs"
                     />
-                    <span className="mt-1 font-mono text-[9px] font-bold text-muted">Scan with any UPI App</span>
+                    <span className="mt-1 font-mono text-[9px] font-bold text-muted">Scan to Pay Exact Balance</span>
                   </div>
 
                   {/* 1-tap mobile button */}
                   <div className="print:hidden space-y-2">
                     <a
                       href={upiIntentUrl}
-                      className="inline-flex items-center gap-2 rounded-xl bg-orange px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#e03d07] transition"
+                      className="inline-flex items-center gap-2 rounded-xl bg-orange px-4 py-2.5 text-xs font-extrabold text-white shadow-xs hover:bg-[#e03d07] transition"
                     >
-                      <span>Pay {formatMoney(balance)} via UPI</span>
+                      <span>Pay {formatMoney(balance)} via UPI App</span>
                     </a>
-                    <p className="text-[10px] text-muted">GPay · PhonePe · Paytm · Cred</p>
+                    <p className="text-[10px] text-muted">Instant Auto-Settlement</p>
                   </div>
                 </div>
               )}

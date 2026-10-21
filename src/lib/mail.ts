@@ -287,3 +287,247 @@ Hyderabad, India
     html,
   });
 }
+
+/**
+ * Send branded OTP verification email for Admin password reset
+ */
+export async function sendOtpEmail(email: string, otp: string, name?: string) {
+  const subject = `Your WasShot Media Security Verification Code: ${otp}`;
+  const text = `
+Hi ${name || "Admin"},
+
+Your one-time verification code (OTP) for resetting your WasShot Media password is:
+
+${otp}
+
+This code is valid for 10 minutes. If you did not request this code, please ignore this email.
+
+WasShot Media Studio Security
+Road No. 36, Jubilee Hills, Hyderabad
+  `.trim();
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0d0d11; color: #ffffff; margin: 0; padding: 24px; }
+    .container { max-width: 520px; margin: 0 auto; background: #16161d; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+    .header { background: #0b0b0e; padding: 36px 32px 28px; text-align: center; border-bottom: 2px solid #ff4d00; }
+    .logo { width: 80px; height: 80px; border-radius: 20px; margin: 0 auto 14px; display: block; object-fit: contain; }
+    .brand { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; margin: 0; }
+    .tagline { color: #ff4d00; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; }
+    .content { padding: 36px 32px; text-align: center; }
+    .greeting { font-size: 18px; font-weight: 700; color: #ffffff; margin-top: 0; margin-bottom: 12px; }
+    .desc { font-size: 14px; line-height: 1.6; color: #a0a0ab; margin-bottom: 24px; }
+    .otp-card { background: #20202a; border: 1px solid rgba(255, 77, 0, 0.3); border-radius: 16px; padding: 24px 16px; margin: 24px 0; }
+    .otp-code { font-family: 'Courier New', monospace; font-size: 38px; font-weight: 900; letter-spacing: 10px; color: #ff5500; text-shadow: 0 0 20px rgba(255,85,0,0.3); margin: 0; }
+    .expiry { font-size: 11px; color: #888894; margin-top: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .warning { font-size: 12px; color: #777784; margin-top: 20px; line-height: 1.5; }
+    .footer { padding: 20px 32px; background: #0f0f14; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 11px; color: #666672; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://wasshot.in/brand/wasshotlogo.png" alt="WasShot Media" class="logo" />
+      <h1 class="brand">WasShot Media</h1>
+      <p class="tagline">Admin Identity Verification</p>
+    </div>
+    <div class="content">
+      <h2 class="greeting">Password Reset Verification</h2>
+      <p class="desc">
+        You requested a password change for <strong>${email}</strong>. Use the secure 6-digit verification code below to set your new password:
+      </p>
+      
+      <div class="otp-card">
+        <div class="otp-code">${otp}</div>
+        <div class="expiry">Expires in 10 Minutes · Single-Use</div>
+      </div>
+
+      <p class="warning">
+        If you did not request this OTP, please disregard this email. Your password will remain unchanged.
+      </p>
+    </div>
+    <div class="footer">
+      WasShot Media Studio · Road No. 36, Jubilee Hills, Hyderabad<br/>
+      Official Studio Security System
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+
+  return sendEmail({
+    to: email,
+    subject,
+    text,
+    html,
+  });
+}
+
+/**
+ * Send branded Tax Invoice email directly to client
+ */
+export async function sendInvoiceEmail(invoice: any, client: any) {
+  const invoiceNum = invoice.invoiceNumber || invoice.number || "INV";
+  const clientName = client.name || "Valued Client";
+  const recipientEmail = client.email;
+  if (!recipientEmail) {
+    return { sent: false, reason: "Client has no email address specified." };
+  }
+
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || "https://wasshot.in";
+  const invoiceUrl = `${origin}/invoice/${invoice._id}`;
+  const totalStr = `₹${Number(invoice.total || 0).toLocaleString("en-IN")}`;
+  const balanceStr = `₹${Number(invoice.balance !== undefined ? invoice.balance : invoice.total || 0).toLocaleString("en-IN")}`;
+  const isPaid = invoice.status === "paid" || Number(invoice.balance || 0) === 0;
+
+  const subject = `Invoice #${invoiceNum} from WasShot Media — ${isPaid ? "Paid in Full" : `Due: ${balanceStr}`}`;
+
+  const text = `
+Hi ${clientName},
+
+Please find your official tax invoice #${invoiceNum} from WasShot Media.
+
+Total Amount: ${totalStr}
+Status: ${isPaid ? "PAID IN FULL" : `Balance Due: ${balanceStr}`}
+
+View & Download your official PDF invoice here:
+${invoiceUrl}
+
+UPI ID for direct settlement: 7396986817@ybl
+
+Thank you for partnering with WasShot Media!
+
+WasShot Media Studio
+Road No. 36, Jubilee Hills, Hyderabad
+Phone: +91 73969 86817
+  `.trim();
+
+  const itemsHtml = (invoice.items || [])
+    .map(
+      (it: any, idx: number) => `
+    <tr>
+      <td style="padding: 10px 0; border-bottom: 1px solid #f0f0eb; font-size: 13px; color: #222;">${idx + 1}. ${it.description || "Production Deliverable"}</td>
+      <td style="padding: 10px 0; border-bottom: 1px solid #f0f0eb; font-size: 13px; text-align: center; color: #666;">${it.quantity || 1}</td>
+      <td style="padding: 10px 0; border-bottom: 1px solid #f0f0eb; font-size: 13px; text-align: right; font-weight: 700; color: #111;">₹${Number(it.amount || (it.quantity || 1) * (it.unitPrice || it.price || 0)).toLocaleString("en-IN")}</td>
+    </tr>
+  `
+    )
+    .join("");
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f6f2; color: #111111; margin: 0; padding: 24px; }
+    .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 24px; border: 1px solid #e8e8e3; overflow: hidden; box-shadow: 0 12px 36px rgba(0,0,0,0.04); }
+    .header { background: #0c0c0c; color: #ffffff; padding: 36px 32px 30px; text-align: center; border-bottom: 2px solid #ff4d00; }
+    .logo { width: 84px; height: 84px; border-radius: 20px; margin: 0 auto 12px; display: block; object-fit: contain; }
+    .brand { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; margin: 0; }
+    .tagline { color: #ff4d00; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; }
+    .content { padding: 36px 32px; }
+    .greeting { font-size: 20px; font-weight: 800; color: #111111; margin-top: 0; margin-bottom: 10px; }
+    .desc { font-size: 14px; line-height: 1.6; color: #555555; margin-bottom: 24px; }
+    .inv-card { background: #fafaf8; border: 1px solid #e8e8e3; border-radius: 16px; padding: 20px; margin-bottom: 24px; }
+    .inv-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e8e8e3; padding-bottom: 12px; margin-bottom: 12px; }
+    .badge { display: inline-block; background: ${isPaid ? "#ecfdf5" : "#fff7ed"}; color: ${isPaid ? "#047857" : "#c2410c"}; font-weight: 800; font-size: 11px; padding: 4px 12px; border-radius: 99px; text-transform: uppercase; border: 1px solid ${isPaid ? "#a7f3d0" : "#ffedd5"}; }
+    .items-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .totals-box { margin-top: 20px; border-top: 2px solid #111111; padding-top: 14px; }
+    .tot-row { display: flex; justify-content: space-between; font-size: 13px; color: #666; margin-bottom: 6px; }
+    .tot-grand { display: flex; justify-content: space-between; font-size: 16px; font-weight: 900; color: #111; margin-top: 10px; border-top: 1px solid #e8e8e3; padding-top: 10px; }
+    .upi-box { background: #fff8f5; border: 1px solid #ffdcd0; border-radius: 14px; padding: 18px; margin: 24px 0; text-align: center; }
+    .upi-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #c2410c; letter-spacing: 1px; margin-bottom: 6px; }
+    .upi-id { font-family: 'Courier New', monospace; font-size: 20px; font-weight: 900; color: #ff4d00; margin: 0; }
+    .btn-container { text-align: center; margin: 32px 0 16px; }
+    .cta-btn { display: inline-block; background: #ff4d00; color: #ffffff !important; font-weight: 800; font-size: 14px; padding: 14px 32px; border-radius: 99px; text-decoration: none; box-shadow: 0 4px 14px rgba(255, 77, 0, 0.3); }
+    .footer { padding: 24px 32px; background: #fafaf8; border-top: 1px solid #f0f0eb; text-align: center; font-size: 12px; color: #888884; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://wasshot.in/brand/wasshotlogo.png" alt="WasShot Media" class="logo" />
+      <div class="brand">WasShot Media</div>
+      <div class="tagline">Cinema Productions & Creative Agency</div>
+    </div>
+    <div class="content">
+      <h2 class="greeting">Hello ${clientName},</h2>
+      <p class="desc">
+        Here is your official tax invoice <strong>#${invoiceNum}</strong> from WasShot Media Studio. You can review the line items below or click the button to download your official A4 PDF copy.
+      </p>
+
+      <div class="inv-card">
+        <table style="width: 100%; margin-bottom: 12px;">
+          <tr>
+            <td style="font-size: 14px; font-weight: 800; color: #111;">Invoice #${invoiceNum}</td>
+            <td style="text-align: right;"><span class="badge">${isPaid ? "PAID IN FULL" : "PAYMENT DUE"}</span></td>
+          </tr>
+        </table>
+
+        <table class="items-table">
+          <thead>
+            <tr style="font-size: 11px; text-transform: uppercase; color: #888; border-bottom: 1px solid #e8e8e3;">
+              <th style="text-align: left; padding-bottom: 8px;">Scope Description</th>
+              <th style="text-align: center; padding-bottom: 8px;">Qty</th>
+              <th style="text-align: right; padding-bottom: 8px;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsHtml}
+          </tbody>
+        </table>
+
+        <div class="totals-box">
+          <table style="width: 100%;">
+            <tr><td style="font-size: 13px; color: #666; padding: 3px 0;">Subtotal</td><td style="text-align: right; font-weight: 600;">₹${Number(invoice.subtotal || invoice.total || 0).toLocaleString("en-IN")}</td></tr>
+            <tr><td style="font-size: 13px; color: #666; padding: 3px 0;">GST (18%)</td><td style="text-align: right; font-weight: 600;">₹${Number(invoice.tax || Math.round((invoice.subtotal || invoice.total || 0) * 0.18)).toLocaleString("en-IN")}</td></tr>
+            <tr style="border-top: 1px solid #e8e8e3; font-weight: 800; font-size: 15px; color: #111;">
+              <td style="padding-top: 8px;">Total Payable</td>
+              <td style="text-align: right; padding-top: 8px; color: #ff4d00;">${totalStr}</td>
+            </tr>
+            <tr style="font-weight: 900; font-size: 16px; color: ${isPaid ? "#047857" : "#b91c1c"};">
+              <td style="padding-top: 4px;">Balance Due</td>
+              <td style="text-align: right; padding-top: 4px;">${balanceStr}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      ${
+        !isPaid
+          ? `
+      <div class="upi-box">
+        <div class="upi-title">Direct UPI Settlement</div>
+        <div class="upi-id">7396986817@ybl</div>
+        <div style="font-size: 11px; color: #888; margin-top: 6px;">Supported: GPay · PhonePe · Paytm · Cred · BHIM</div>
+      </div>
+      `
+          : ""
+      }
+
+      <div class="btn-container">
+        <a href="${invoiceUrl}" class="cta-btn">View & Download Official PDF Invoice →</a>
+      </div>
+    </div>
+    <div class="footer">
+      WasShot Media Studio · Road No. 36, Jubilee Hills, Hyderabad<br/>
+      Phone: +91 73969 86817 · Email: wasshotmedia@gmail.com · <a href="https://wasshot.in" style="color: #ff4d00; text-decoration: none;">wasshot.in</a>
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+
+  return sendEmail({
+    to: recipientEmail,
+    subject,
+    text,
+    html,
+  });
+}
+

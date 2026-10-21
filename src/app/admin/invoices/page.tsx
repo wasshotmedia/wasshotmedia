@@ -19,6 +19,7 @@ import {
   ArrowRight,
   Download,
   MessageCircle,
+  Mail,
 } from "lucide-react";
 import { formatMoney } from "@/lib/utils";
 
@@ -64,7 +65,7 @@ export default function InvoicesPage() {
   ]);
   const [formTaxRate, setFormTaxRate] = useState(18); // GST 18%
   const [formNotes, setFormNotes] = useState(
-    "Bank: HDFC Bank · WasShot Media · IFSC: HDFC0001234 · UPI: 7396986817@upi"
+    "UPI Settlement: 7396986817@ybl · WasShot Media"
   );
 
   // Record Payment Modal
@@ -408,21 +409,52 @@ export default function InvoicesPage() {
                             `Total: ${formatMoney(inv.total)}\n` +
                             `Status: ${inv.status === "paid" ? "PAID" : `Balance Due: ${formatMoney(inv.balance)}`}\n\n` +
                             `View & Download PDF invoice here:\n${origin}/invoice/${inv._id}\n\n` +
-                            (inv.status !== "paid" ? `UPI ID: 7396986817@upi\n\n` : "") +
+                            (inv.status !== "paid" ? `UPI ID: 7396986817@ybl\n\n` : "") +
                             `Thank you!`
                           );
                           const waUrl = rawPhone ? `https://wa.me/${rawPhone}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
                           return (
-                            <a
-                              href={waUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1 rounded-full border border-emerald-600/30 bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-800 hover:bg-emerald-600 hover:text-white transition"
-                              title="Share on WhatsApp"
-                            >
-                              <MessageCircle className="h-3 w-3" />
-                              <span className="hidden sm:inline">WhatsApp</span>
-                            </a>
+                            <>
+                              <a
+                                href={waUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 rounded-full border border-emerald-600/30 bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-800 hover:bg-emerald-600 hover:text-white transition"
+                                title="Share on WhatsApp"
+                              >
+                                <MessageCircle className="h-3 w-3" />
+                                <span className="hidden sm:inline">WhatsApp</span>
+                              </a>
+                              <button
+                                suppressHydrationWarning
+                                type="button"
+                                onClick={async () => {
+                                  const clientEmail = (inv.client as any)?.email;
+                                  if (!clientEmail) {
+                                    alert("No email address found for this client.");
+                                    return;
+                                  }
+                                  const confirmed = window.confirm(`Send branded tax invoice email to ${clientEmail}?`);
+                                  if (!confirmed) return;
+                                  try {
+                                    const res = await fetch(`/api/admin/invoices/${inv._id}/send-email`, { method: "POST" });
+                                    const d = await res.json().catch(() => ({}));
+                                    if (res.ok) {
+                                      alert(d.message || `Tax invoice sent successfully to ${clientEmail}!`);
+                                    } else {
+                                      alert(d.error || "Failed to send invoice email.");
+                                    }
+                                  } catch (err: any) {
+                                    alert(err.message || "Failed to send email");
+                                  }
+                                }}
+                                className="inline-flex items-center gap-1 rounded-full border border-[#e8e8e3] bg-white px-2.5 py-1 text-xs font-semibold text-ink hover:border-orange hover:text-orange transition"
+                                title="Send Branded Invoice Email to Client"
+                              >
+                                <Mail className="h-3 w-3 text-orange" />
+                                <span className="hidden sm:inline">Email</span>
+                              </button>
+                            </>
                           );
                         })()}
                         {inv.status !== "paid" && (

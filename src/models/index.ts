@@ -15,6 +15,8 @@ const userSchema = new Schema(
     bio: String,
     avatarUrl: String,
     isActive: { type: Boolean, default: true },
+    resetOtp: String,
+    resetOtpExpires: Date,
     lastLoginAt: Date,
   },
   { timestamps: true },

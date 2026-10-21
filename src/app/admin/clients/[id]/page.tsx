@@ -95,7 +95,7 @@ export default function ClientProfilePage({
   ]);
   const [invTaxRate, setInvTaxRate] = useState(18); // GST 18%
   const [invNotes, setInvNotes] = useState(
-    "Bank: HDFC Bank · WasShot Media · A/C: 50200084920194 · IFSC: HDFC0001234 · UPI: 7396986817@upi"
+    "UPI Settlement: 7396986817@ybl · WasShot Media"
   );
 
   // 3. Create Project Modal State
@@ -408,6 +408,28 @@ export default function ClientProfilePage({
       navigator.clipboard.writeText(link);
       setCopiedId(invId);
       setTimeout(() => setCopiedId(null), 2500);
+    }
+  };
+
+  const handleSendInvoiceEmail = async (invId: string) => {
+    if (!client?.email) {
+      alert("This client does not have an email address configured.");
+      return;
+    }
+    const confirmed = window.confirm(`Send official branded tax invoice email to ${client.email}?`);
+    if (!confirmed) return;
+    try {
+      const res = await fetch(`/api/admin/invoices/${invId}/send-email`, {
+        method: "POST",
+      });
+      const d = await res.json().catch(() => ({}));
+      if (res.ok) {
+        alert(d.message || `Tax invoice successfully sent to ${client.email}!`);
+      } else {
+        alert(d.error || "Failed to send invoice email.");
+      }
+    } catch (err: any) {
+      alert(err.message || "Failed to send invoice email.");
     }
   };
 
@@ -1032,7 +1054,7 @@ export default function ClientProfilePage({
                     `Total Amount: ${formatMoney(invTotal)}\n` +
                     `Status: ${isPaid ? "PAID" : `Balance Due: ${formatMoney(invBalance)}`}\n\n` +
                     `View & Download your official PDF invoice here:\n${publicInvoiceUrl}\n\n` +
-                    (!isPaid ? `UPI ID for direct settlement: 7396986817@upi\n\n` : "") +
+                    (!isPaid ? `UPI ID for direct settlement: 7396986817@ybl\n\n` : "") +
                     `Thank you for working with WasShot Media!`
                   );
 
@@ -1107,15 +1129,17 @@ export default function ClientProfilePage({
                           <span>WhatsApp</span>
                         </a>
 
-                        {/* 3. Share Email */}
+                        {/* 3. Send Branded Email to Client */}
                         {client.email && (
-                          <a
-                            href={mailtoUrl}
-                            className="inline-flex items-center gap-1 rounded-full border border-[#e8e8e3] bg-white px-3 py-1.5 text-xs font-semibold text-ink hover:bg-black/[0.04]"
-                            title="Send invoice via email"
+                          <button
+                            type="button"
+                            onClick={() => handleSendInvoiceEmail(inv._id)}
+                            className="inline-flex items-center gap-1 rounded-full border border-[#e8e8e3] bg-white px-3 py-1.5 text-xs font-semibold text-ink hover:border-orange hover:text-orange transition"
+                            title={`Send branded invoice email directly to ${client.email}`}
                           >
                             <Mail className="h-3.5 w-3.5 text-orange" />
-                          </a>
+                            <span>Email</span>
+                          </button>
                         )}
 
                         {/* 4. Copy Invoice Link */}

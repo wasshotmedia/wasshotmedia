@@ -1,27 +1,26 @@
 {
   "users": [
     {
-      "_id": "6ac2971aa9614f9f4657a359",
-      "name": "Admin",
-      "email": "admin@wasshotmedia.com",
-      "passwordHash": "$2b$10$/8Ys4uNDxjm5BpFGX6opqekVJO4B3iyKCbHIid0Ro/paKmVMlLesu",
+      "_id": "user_praneeth_01",
+      "name": "Praneeth Badugu",
+      "email": "praneethbadugu7781@gmail.com",
+      "passwordHash": "/9tcDoaHRwwArP.tn1mCHRuIsxAGihXl/h4iB56QWDso/O",
       "role": "owner",
-      "title": "Creative & Digital Lead",
+      "title": "Co-Founder & Creative Lead",
       "isActive": true,
-      "createdAt": "2026-10-04T18:12:42.808Z",
-      "updatedAt": "2026-10-04T18:26:03.512Z",
-      "lastLoginAt": "2026-10-04T18:26:03.512Z"
+      "createdAt": "2026-10-07T10:09:10.886Z",
+      "updatedAt": "2026-10-07T10:09:10.886Z"
     },
     {
-      "_id": "6ac2971aa8615b6d94465957",
-      "name": "Studio Lead",
-      "email": "lead@wasshotmedia.com",
-      "passwordHash": "$2b$10$HM6zEDWMACquAFRfL56Ml.5e0oP5l5wr8AQdHcf9qT3ioiv2PRwKW",
+      "_id": "user_waseem_02",
+      "name": "Waseem Akram",
+      "email": "wassemakram6114@gmail.com",
+      "passwordHash": "/9tcDoaHRwwArP.tn1mCHRuIsxAGihXl/h4iB56QWDso/O",
       "role": "owner",
-      "title": "Creative & Media Lead",
+      "title": "Co-Founder & Media Lead",
       "isActive": true,
-      "createdAt": "2026-10-04T18:12:42.808Z",
-      "updatedAt": "2026-10-04T18:12:42.808Z"
+      "createdAt": "2026-10-07T10:09:10.886Z",
+      "updatedAt": "2026-10-07T10:09:10.886Z"
     }
   ],
   "clients": [],

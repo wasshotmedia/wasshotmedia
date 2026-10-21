@@ -11,6 +11,8 @@ export interface StudioUser {
   title?: string;
   avatarUrl?: string;
   isActive: boolean;
+  resetOtp?: string;
+  resetOtpExpires?: string;
   lastLoginAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -190,22 +192,22 @@ function getInitialStore(): StudioStoreData {
   const users: StudioUser[] = [
     {
       _id: adminId,
-      name: "Admin",
-      email: "admin@wasshotmedia.com",
-      passwordHash: "$2b$10$/8Ys4uNDxjm5BpFGX6opqekVJO4B3iyKCbHIid0Ro/paKmVMlLesu",
+      name: "Praneeth Badugu",
+      email: "praneethbadugu7781@gmail.com",
+      passwordHash: "$2b$10$V780MH2/9tcDoaHRwwArP.tn1mCHRuIsxAGihXl/h4iB56QWDso/O",
       role: "owner",
-      title: "Creative and Digital Lead",
+      title: "Co-Founder & Creative Lead",
       isActive: true,
       createdAt: now,
       updatedAt: now,
     },
     {
       _id: leadId,
-      name: "Studio Lead",
-      email: "lead@wasshotmedia.com",
-      passwordHash: "$2b$10$HM6zEDWMACquAFRfL56Ml.5e0oP5l5wr8AQdHcf9qT3ioiv2PRwKW",
+      name: "Waseem Akram",
+      email: "wassemakram6114@gmail.com",
+      passwordHash: "$2b$10$V780MH2/9tcDoaHRwwArP.tn1mCHRuIsxAGihXl/h4iB56QWDso/O",
       role: "owner",
-      title: "Creative and Media Lead",
+      title: "Co-Founder & Media Lead",
       isActive: true,
       createdAt: now,
       updatedAt: now,
