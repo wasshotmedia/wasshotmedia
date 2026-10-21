@@ -55,10 +55,25 @@ export async function POST(request: NextRequest) {
 
   await setSessionCookie(sessionUser);
 
-  if (isMongoConnected() && typeof user.save === "function") {
+  if (isMongoConnected()) {
     try {
-      user.lastLoginAt = new Date();
-      await user.save();
+      if (typeof user.save === "function") {
+        user.lastLoginAt = new Date();
+        await user.save();
+      } else {
+        // Auto-seed user into MongoDB if user came from local store
+        const existing = await User.findOne({ email });
+        if (!existing) {
+          await User.create({
+            name: user.name,
+            email: user.email,
+            passwordHash: user.passwordHash,
+            role: user.role,
+            isActive: true,
+            lastLoginAt: new Date(),
+          });
+        }
+      }
       await ActivityLog.create({
         actorId: user._id,
         action: "login",

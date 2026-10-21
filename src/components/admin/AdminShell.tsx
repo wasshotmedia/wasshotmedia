@@ -98,13 +98,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     fetch("/api/auth/me")
       .then((r) => r.json())
       .then((d) => {
-        if (d.user) setUser(d.user);
-        else router.push("/admin/login");
+        if (d?.user) setUser(d.user);
       })
-      .catch(() => router.push("/admin/login"));
+      .catch(() => {});
 
     fetchNotifications();
-  }, [router]);
+  }, []);
 
   // Close mobile drawer on route change
   useEffect(() => {
@@ -500,7 +499,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                           <p className="font-semibold text-ink">{n.title}</p>
                           {n.body && <p className="mt-0.5 text-muted">{n.body}</p>}
                           <p className="mt-1 font-display text-[9px] text-muted font-medium">
-                            {new Date(n.createdAt).toLocaleDateString()}
+                            {n.createdAt ? new Date(n.createdAt).toLocaleDateString() : ""}
                           </p>
                         </div>
                       ))

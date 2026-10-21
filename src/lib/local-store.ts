@@ -455,7 +455,7 @@ class StudioLocalStore {
     const todayStr = now.toISOString().split("T")[0];
 
     const allEvents = this.getCollection("events");
-    const todayEvents = allEvents.filter((ev: any) => ev.start && ev.start.startsWith(todayStr));
+    const todayEvents = allEvents.filter((ev: any) => ev.start && String(ev.start).startsWith(todayStr));
     const upcomingShoots = allEvents.filter(
       (ev: any) => ev.type === "shoot" && ev.status !== "cancelled" && new Date(ev.start) >= now
     );
@@ -466,9 +466,9 @@ class StudioLocalStore {
     );
 
     const allTasks = this.getCollection("tasks");
-    const tasksToday = allTasks.filter((t: any) => t.status !== "done" && t.dueDate && t.dueDate.startsWith(todayStr));
+    const tasksToday = allTasks.filter((t: any) => t.status !== "done" && t.dueDate && String(t.dueDate).startsWith(todayStr));
     const tasksOverdue = allTasks.filter(
-      (t: any) => t.status !== "done" && t.dueDate && new Date(t.dueDate) < now && !t.dueDate.startsWith(todayStr)
+      (t: any) => t.status !== "done" && t.dueDate && new Date(t.dueDate) < now && !String(t.dueDate).startsWith(todayStr)
     );
 
     const allInvoices = this.getCollection("invoices");

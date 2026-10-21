@@ -12,7 +12,6 @@ import {
   Clock,
   MapPin,
   AlertCircle,
-  Plus,
   ArrowRight,
   TrendingUp,
   Activity,
@@ -40,8 +39,52 @@ interface DashboardData {
   activityLogs: any[];
 }
 
+const DEFAULT_DASHBOARD_DATA: DashboardData = {
+  user: { name: "Praneeth Badugu", role: "owner" },
+  metrics: {
+    leads: 0,
+    clients: 0,
+    projects: 0,
+    shoots: 0,
+    tasksToday: 0,
+    tasksOverdue: 0,
+    pendingInvoices: 0,
+    outstandingAmount: 0,
+  },
+  todayEvents: [],
+  upcomingShoots: [],
+  leadsAttention: [],
+  tasks: [],
+  activityLogs: [],
+};
+
+function safeTime(val?: any): string {
+  if (!val) return "";
+  try {
+    const d = new Date(val);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  } catch {
+    return "";
+  }
+}
+
+function safeDateTime(val?: any): { date: string; time: string } {
+  if (!val) return { date: "", time: "" };
+  try {
+    const d = new Date(val);
+    if (isNaN(d.getTime())) return { date: "", time: "" };
+    return {
+      date: d.toLocaleDateString([], { month: "short", day: "numeric" }),
+      time: d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+  } catch {
+    return { date: "", time: "" };
+  }
+}
+
 export default function AdminDashboardPage() {
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<DashboardData>(DEFAULT_DASHBOARD_DATA);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,8 +96,16 @@ export default function AdminDashboardPage() {
       const singleRes = await fetch("/api/admin/dashboard-overview");
       if (singleRes.ok) {
         const payload = await singleRes.json();
-        if (payload?.metrics) {
-          setData(payload);
+        if (payload && payload.metrics) {
+          setData({
+            user: payload.user || DEFAULT_DASHBOARD_DATA.user,
+            metrics: { ...DEFAULT_DASHBOARD_DATA.metrics, ...payload.metrics },
+            todayEvents: Array.isArray(payload.todayEvents) ? payload.todayEvents : [],
+            upcomingShoots: Array.isArray(payload.upcomingShoots) ? payload.upcomingShoots : [],
+            leadsAttention: Array.isArray(payload.leadsAttention) ? payload.leadsAttention : [],
+            tasks: Array.isArray(payload.tasks) ? payload.tasks : [],
+            activityLogs: Array.isArray(payload.activityLogs) ? payload.activityLogs : [],
+          });
           setLoading(false);
           return;
         }
@@ -85,55 +136,60 @@ export default function AdminDashboardPage() {
       const now = new Date();
       const todayStr = now.toISOString().split("T")[0];
 
-      const allEvents = eventsRes.items || [];
+      const allEvents = Array.isArray(eventsRes?.items) ? eventsRes.items : [];
       const todayEvents = allEvents.filter((ev: any) =>
-        ev.start && ev.start.startsWith(todayStr),
+        ev && ev.start && String(ev.start).startsWith(todayStr)
       );
       const upcomingShoots = allEvents.filter(
         (ev: any) =>
+          ev &&
           ev.type === "shoot" &&
           ev.status !== "cancelled" &&
-          new Date(ev.start) >= now,
+          ev.start &&
+          new Date(ev.start).getTime() >= now.getTime()
       );
 
-      const allLeads = leadsRes.items || [];
+      const allLeads = Array.isArray(leadsRes?.items) ? leadsRes.items : [];
       const leadsAttention = allLeads.filter(
         (l: any) =>
-          l.stage === "new" ||
-          l.stage === "proposal_sent" ||
-          (l.followUpAt && new Date(l.followUpAt) <= now),
+          l &&
+          (l.stage === "new" ||
+            l.stage === "proposal_sent" ||
+            (l.followUpAt && new Date(l.followUpAt).getTime() <= now.getTime()))
       );
 
-      const allTasks = tasksRes.items || [];
+      const allTasks = Array.isArray(tasksRes?.items) ? tasksRes.items : [];
       const tasksToday = allTasks.filter(
         (t: any) =>
+          t &&
           t.status !== "done" &&
           t.dueDate &&
-          t.dueDate.startsWith(todayStr),
+          String(t.dueDate).startsWith(todayStr)
       );
       const tasksOverdue = allTasks.filter(
         (t: any) =>
+          t &&
           t.status !== "done" &&
           t.dueDate &&
-          new Date(t.dueDate) < now &&
-          !t.dueDate.startsWith(todayStr),
+          new Date(t.dueDate).getTime() < now.getTime() &&
+          !String(t.dueDate).startsWith(todayStr)
       );
 
-      const allInvoices = invoicesRes.items || [];
+      const allInvoices = Array.isArray(invoicesRes?.items) ? invoicesRes.items : [];
       const pendingInvoices = allInvoices.filter(
-        (inv: any) => inv.status !== "paid" && inv.status !== "cancelled",
+        (inv: any) => inv && inv.status !== "paid" && inv.status !== "cancelled"
       );
       const outstandingAmount = pendingInvoices.reduce(
-        (sum: number, inv: any) => sum + (inv.balance ?? inv.total ?? 0),
-        0,
+        (sum: number, inv: any) => sum + (Number(inv.balance ?? inv.total) || 0),
+        0
       );
 
       setData({
-        user: meRes.user || { name: "Praneeth", role: "owner" },
+        user: meRes?.user || DEFAULT_DASHBOARD_DATA.user,
         metrics: {
-          leads: analyticsRes.leads ?? allLeads.length,
-          clients: analyticsRes.clients ?? 0,
-          projects: analyticsRes.projects ?? 0,
+          leads: Number(analyticsRes?.leads ?? allLeads.length) || 0,
+          clients: Number(analyticsRes?.clients) || 0,
+          projects: Number(analyticsRes?.projects) || 0,
           shoots: upcomingShoots.length,
           tasksToday: tasksToday.length,
           tasksOverdue: tasksOverdue.length,
@@ -143,11 +199,12 @@ export default function AdminDashboardPage() {
         todayEvents,
         upcomingShoots: upcomingShoots.slice(0, 5),
         leadsAttention: leadsAttention.slice(0, 5),
-        tasks: allTasks.filter((t: any) => t.status !== "done").slice(0, 6),
-        activityLogs: (activityRes.items || []).slice(0, 8),
+        tasks: allTasks.filter((t: any) => t && t.status !== "done").slice(0, 6),
+        activityLogs: Array.isArray(activityRes?.items) ? activityRes.items.slice(0, 8) : [],
       });
     } catch (err) {
       console.error("Failed to load dashboard overview", err);
+      setData((prev) => prev || DEFAULT_DASHBOARD_DATA);
     } finally {
       setLoading(false);
     }
@@ -163,7 +220,15 @@ export default function AdminDashboardPage() {
     );
   }
 
-  const userFirstName = data?.user?.name ? data.user.name.split(" ")[0] : "Praneeth";
+  const current = data || DEFAULT_DASHBOARD_DATA;
+  const metrics = current.metrics || DEFAULT_DASHBOARD_DATA.metrics;
+  const todayEvents = current.todayEvents || [];
+  const upcomingShoots = current.upcomingShoots || [];
+  const leadsAttention = current.leadsAttention || [];
+  const tasks = current.tasks || [];
+  const activityLogs = current.activityLogs || [];
+
+  const userFirstName = current.user?.name ? current.user.name.split(" ")[0] : "Praneeth";
   const currentDateFormatted = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
@@ -227,7 +292,7 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* 2. REAL OPERATIONAL METRICS (Zero Fake Data) */}
+      {/* 2. REAL OPERATIONAL METRICS (Safe Defaults Guaranteed) */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
         <Link
           href="/admin/leads"
@@ -238,7 +303,7 @@ export default function AdminDashboardPage() {
             <Target className="h-3.5 w-3.5" />
           </div>
           <p className="display mt-2 text-2xl font-extrabold text-ink">
-            {data?.metrics.leads ?? 0}
+            {metrics.leads}
           </p>
           <span className="mt-1 text-[10px] text-muted">Pipeline leads</span>
         </Link>
@@ -252,7 +317,7 @@ export default function AdminDashboardPage() {
             <Users className="h-3.5 w-3.5" />
           </div>
           <p className="display mt-2 text-2xl font-extrabold text-ink">
-            {data?.metrics.clients ?? 0}
+            {metrics.clients}
           </p>
           <span className="mt-1 text-[10px] text-muted">Active accounts</span>
         </Link>
@@ -266,7 +331,7 @@ export default function AdminDashboardPage() {
             <Briefcase className="h-3.5 w-3.5" />
           </div>
           <p className="display mt-2 text-2xl font-extrabold text-ink">
-            {data?.metrics.projects ?? 0}
+            {metrics.projects}
           </p>
           <span className="mt-1 text-[10px] text-muted">In production</span>
         </Link>
@@ -280,7 +345,7 @@ export default function AdminDashboardPage() {
             <Calendar className="h-3.5 w-3.5" />
           </div>
           <p className="display mt-2 text-2xl font-extrabold text-ink">
-            {data?.metrics.shoots ?? 0}
+            {metrics.shoots}
           </p>
           <span className="mt-1 text-[10px] text-muted">Upcoming confirmed</span>
         </Link>
@@ -294,7 +359,7 @@ export default function AdminDashboardPage() {
             <Clock className="h-3.5 w-3.5" />
           </div>
           <p className="display mt-2 text-2xl font-extrabold text-ink">
-            {data?.metrics.tasksToday ?? 0}
+            {metrics.tasksToday}
           </p>
           <span className="mt-1 text-[10px] text-muted">Tasks today</span>
         </Link>
@@ -308,7 +373,7 @@ export default function AdminDashboardPage() {
             <AlertCircle className="h-3.5 w-3.5 text-red-500" />
           </div>
           <p className="display mt-2 text-2xl font-extrabold text-red-600">
-            {data?.metrics.tasksOverdue ?? 0}
+            {metrics.tasksOverdue}
           </p>
           <span className="mt-1 text-[10px] text-muted">Action needed</span>
         </Link>
@@ -322,7 +387,7 @@ export default function AdminDashboardPage() {
             <Receipt className="h-3.5 w-3.5" />
           </div>
           <p className="display mt-2 text-2xl font-extrabold text-ink">
-            {data?.metrics.pendingInvoices ?? 0}
+            {metrics.pendingInvoices}
           </p>
           <span className="mt-1 text-[10px] text-muted">Pending payment</span>
         </Link>
@@ -336,7 +401,7 @@ export default function AdminDashboardPage() {
             <TrendingUp className="h-3.5 w-3.5 text-orange" />
           </div>
           <p className="display mt-2 text-lg font-extrabold text-ink truncate">
-            {data?.metrics.outstandingAmount ? formatMoney(data.metrics.outstandingAmount) : "₹0"}
+            {metrics.outstandingAmount ? formatMoney(metrics.outstandingAmount) : "₹0"}
           </p>
           <span className="mt-1 text-[10px] text-muted">Receivable</span>
         </Link>
@@ -362,24 +427,21 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="mt-4">
-            {data?.todayEvents && data.todayEvents.length > 0 ? (
+            {todayEvents && todayEvents.length > 0 ? (
               <div className="divide-y divide-[#f0f0eb]">
-                {data.todayEvents.map((ev: any) => (
+                {todayEvents.map((ev: any) => (
                   <div
-                    key={ev._id}
+                    key={ev._id || ev.id}
                     className="flex flex-col justify-between gap-3 py-3.5 sm:flex-row sm:items-center"
                   >
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="rounded-md bg-orange/10 px-2 py-0.5 font-display text-[10px] font-bold text-orange">
-                          {new Date(ev.start).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {safeTime(ev.start)}
                         </span>
                         <p className="text-sm font-bold text-ink">{ev.title}</p>
                         <span className="rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-medium text-muted uppercase">
-                          {ev.type}
+                          {ev.type || "event"}
                         </span>
                       </div>
                       <div className="mt-1 flex items-center gap-3 text-xs text-muted">
@@ -388,11 +450,11 @@ export default function AdminDashboardPage() {
                             <MapPin className="h-3 w-3" /> {ev.location}
                           </span>
                         )}
-                        <span>· {ev.status}</span>
+                        <span>· {ev.status || "confirmed"}</span>
                       </div>
                     </div>
                     <Link
-                      href={`/admin/calendar?event=${ev._id}`}
+                      href={`/admin/calendar?event=${ev._id || ev.id}`}
                       className="rounded-full border border-[#e8e8e3] bg-[#fbfbfa] px-3 py-1 text-xs font-semibold text-ink hover:border-black/30"
                     >
                       View
@@ -430,14 +492,14 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="mt-4">
-            {data?.leadsAttention && data.leadsAttention.length > 0 ? (
+            {leadsAttention && leadsAttention.length > 0 ? (
               <div className="divide-y divide-[#f0f0eb]">
-                {data.leadsAttention.map((lead: any) => (
-                  <div key={lead._id} className="py-3">
+                {leadsAttention.map((lead: any) => (
+                  <div key={lead._id || lead.id} className="py-3">
                     <div className="flex items-center justify-between">
                       <p className="text-xs font-bold text-ink">{lead.name}</p>
                       <span className="rounded-full bg-orange/10 px-2 py-0.5 text-[10px] font-bold text-orange uppercase">
-                        {lead.stage.replace("_", " ")}
+                        {(lead.stage || "new").replace("_", " ")}
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-muted line-clamp-1">
@@ -476,7 +538,7 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="mt-4 overflow-x-auto">
-            {data?.upcomingShoots && data.upcomingShoots.length > 0 ? (
+            {upcomingShoots && upcomingShoots.length > 0 ? (
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-[#f0f0eb] font-display text-[10px] uppercase font-bold text-muted">
@@ -487,28 +549,23 @@ export default function AdminDashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#f0f0eb]">
-                  {data.upcomingShoots.map((shoot: any) => (
-                    <tr key={shoot._id} className="hover:bg-[#fbfbfa]">
-                      <td className="py-3 font-medium text-ink">
-                        {new Date(shoot.start).toLocaleDateString([], {
-                          month: "short",
-                          day: "numeric",
-                        })}{" "}
-                        ·{" "}
-                        {new Date(shoot.start).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                      <td className="py-3 font-bold text-ink">{shoot.title}</td>
-                      <td className="py-3 text-muted">{shoot.location || "Vijayawada"}</td>
-                      <td className="py-3">
-                        <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-bold text-emerald-700 border border-emerald-200 text-[10px]">
-                          Confirmed
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {upcomingShoots.map((shoot: any) => {
+                    const dt = safeDateTime(shoot.start);
+                    return (
+                      <tr key={shoot._id || shoot.id} className="hover:bg-[#fbfbfa]">
+                        <td className="py-3 font-medium text-ink">
+                          {dt.date} · {dt.time}
+                        </td>
+                        <td className="py-3 font-bold text-ink">{shoot.title}</td>
+                        <td className="py-3 text-muted">{shoot.location || "Vijayawada"}</td>
+                        <td className="py-3">
+                          <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-bold text-emerald-700 border border-emerald-200 text-[10px]">
+                            {shoot.status || "Confirmed"}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             ) : (
@@ -534,10 +591,10 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="mt-4">
-            {data?.tasks && data.tasks.length > 0 ? (
+            {tasks && tasks.length > 0 ? (
               <div className="divide-y divide-[#f0f0eb]">
-                {data.tasks.map((task: any) => (
-                  <div key={task._id} className="flex items-center justify-between py-2.5">
+                {tasks.map((task: any) => (
+                  <div key={task._id || task.id} className="flex items-center justify-between py-2.5">
                     <div className="flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-orange" />
                       <p className="text-xs font-medium text-ink">{task.title}</p>
@@ -572,10 +629,10 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="mt-4">
-          {data?.activityLogs && data.activityLogs.length > 0 ? (
+          {activityLogs && activityLogs.length > 0 ? (
             <div className="space-y-3">
-              {data.activityLogs.map((log: any) => (
-                <div key={log._id} className="flex items-center justify-between text-xs">
+              {activityLogs.map((log: any) => (
+                <div key={log._id || log.id} className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-3">
                     <span className="h-1.5 w-1.5 rounded-full bg-orange" />
                     <span className="font-semibold text-ink">{log.action}</span>
@@ -586,10 +643,7 @@ export default function AdminDashboardPage() {
                     )}
                   </div>
                   <span className="font-display text-[10px] text-muted font-medium">
-                    {new Date(log.createdAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                    {safeTime(log.createdAt)}
                   </span>
                 </div>
               ))}

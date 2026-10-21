@@ -38,8 +38,8 @@ export default function AdminLoginPage() {
       if (!res.ok) {
         setError(data.error || "Login failed. Check your credentials.");
       } else {
-        router.push("/admin");
-        router.refresh();
+        // Hard redirect to ensure session cookie is committed and refreshed
+        window.location.href = "/admin";
       }
     } catch (err: any) {
       setError(err.message || "Failed to communicate with authentication server.");
