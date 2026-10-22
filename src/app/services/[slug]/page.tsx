@@ -14,7 +14,18 @@ export async function generateMetadata({
   const content = await getPublicContent();
   const service = content.services.find((s) => s.slug === slug);
   if (!service) return { title: "Service" };
-  return { title: service.title, description: service.description };
+  return {
+    title: `${service.title} — WasShot Media`,
+    description: service.description,
+    alternates: {
+      canonical: `/services/${slug}`,
+    },
+    openGraph: {
+      title: `${service.title} | WasShot Media Vijayawada`,
+      description: service.description,
+      url: `https://wasshot.in/services/${slug}`,
+    },
+  };
 }
 
 export default async function ServiceDetail({

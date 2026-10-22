@@ -15,8 +15,16 @@ export async function generateMetadata({
   const project = content.portfolio.find((p) => p.slug === slug);
   if (!project) return { title: "Project" };
   return {
-    title: project.name,
+    title: `${project.name} — Commercial Production | WasShot Media`,
     description: project.description,
+    alternates: {
+      canonical: `/work/${slug}`,
+    },
+    openGraph: {
+      title: `${project.name} | WasShot Media Portfolio`,
+      description: project.description,
+      url: `https://wasshot.in/work/${slug}`,
+    },
   };
 }
 
