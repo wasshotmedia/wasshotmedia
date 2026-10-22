@@ -96,7 +96,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",
+    google: "sEeLEPbZdREIuENixbTTkyHhpxzHRtl-j83R3pWhyNs",
   },
 };
 
@@ -239,6 +239,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${manrope.variable} h-full antialiased`}
     >
       <head>
+        <meta
+          name="google-site-verification"
+          content="sEeLEPbZdREIuENixbTTkyHhpxzHRtl-j83R3pWhyNs"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
