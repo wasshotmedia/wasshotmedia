@@ -249,7 +249,7 @@ function getInitialStore(): StudioStoreData {
       whatsapp: "+91 73969 86817",
       instagram: "https://instagram.com/wasshot.media",
       linkedin: "",
-      address: "Hyderabad, India",
+      address: "Bhavanipuram, Vijayawada, Andhra Pradesh 520012",
       seoTitle: defaultContent.seoTitle,
       seoDescription: defaultContent.seoDescription,
       availabilityLabel: defaultContent.availabilityLabel,
@@ -335,7 +335,7 @@ class StudioLocalStore {
     if (name === "clients") {
       col.forEach((c: any) => {
         if (!c.status) c.status = "active";
-        if (!c.city) c.city = c.address ? c.address.split(",").pop()?.trim() || "Hyderabad" : "Hyderabad";
+        if (!c.city) c.city = c.address ? c.address.split(",").pop()?.trim() || "Vijayawada" : "Vijayawada";
       });
     }
 

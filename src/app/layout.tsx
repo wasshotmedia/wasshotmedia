@@ -118,10 +118,10 @@ const jsonLd = {
       email: "wasshotmedia@gmail.com",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Moghalrajpuram / Benz Circle",
+        streetAddress: "Bhavanipuram",
         addressLocality: "Vijayawada",
         addressRegion: "Andhra Pradesh",
-        postalCode: "520010",
+        postalCode: "520012",
         addressCountry: "IN",
       },
       geo: {

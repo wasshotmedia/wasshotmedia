@@ -226,7 +226,7 @@ In the meantime, feel free to explore our recent work or message us on WhatsApp 
 
 Best regards,
 WasShot Media Studio Team
-Hyderabad, India
+Bhavanipuram, Vijayawada, Andhra Pradesh
   `.trim();
 
   const html = `
@@ -272,8 +272,8 @@ Hyderabad, India
       </p>
     </div>
     <div class="footer">
-      WasShot Media Studio · Hyderabad, India<br/>
-      <span style="color: #ff4d00;">wasshotmedia.com</span>
+      WasShot Media Studio · Bhavanipuram, Vijayawada, Andhra Pradesh<br/>
+      <span style="color: #ff4d00;">wasshot.in</span>
     </div>
   </div>
 </body>
@@ -303,7 +303,7 @@ ${otp}
 This code is valid for 10 minutes. If you did not request this code, please ignore this email.
 
 WasShot Media Studio Security
-Road No. 36, Jubilee Hills, Hyderabad
+Bhavanipuram, Vijayawada, Andhra Pradesh
   `.trim();
 
   const html = `
@@ -351,7 +351,7 @@ Road No. 36, Jubilee Hills, Hyderabad
       </p>
     </div>
     <div class="footer">
-      WasShot Media Studio · Road No. 36, Jubilee Hills, Hyderabad<br/>
+      WasShot Media Studio · Bhavanipuram, Vijayawada, Andhra Pradesh<br/>
       Official Studio Security System
     </div>
   </div>
@@ -402,7 +402,7 @@ UPI ID for direct settlement: 7396986817@ybl
 Thank you for partnering with WasShot Media!
 
 WasShot Media Studio
-Road No. 36, Jubilee Hills, Hyderabad
+Bhavanipuram, Vijayawada, Andhra Pradesh 520012
 Phone: +91 73969 86817
   `.trim();
 
@@ -515,7 +515,7 @@ Phone: +91 73969 86817
       </div>
     </div>
     <div class="footer">
-      WasShot Media Studio · Road No. 36, Jubilee Hills, Hyderabad<br/>
+      WasShot Media Studio · Bhavanipuram, Vijayawada, Andhra Pradesh 520012<br/>
       Phone: +91 73969 86817 · Email: wasshotmedia@gmail.com · <a href="https://wasshot.in" style="color: #ff4d00; text-decoration: none;">wasshot.in</a>
     </div>
   </div>

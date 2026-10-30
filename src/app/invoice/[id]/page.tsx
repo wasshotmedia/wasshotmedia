@@ -328,12 +328,12 @@ export default function PublicInvoicePage({
 
               <div className="mt-4 space-y-0.5 text-xs text-muted leading-relaxed">
                 <p className="font-semibold text-ink">WasShot Media Studio</p>
-                <p>Road No. 36, Jubilee Hills, Hyderabad, Telangana 500033</p>
+                <p>Bhavanipuram, Vijayawada, Andhra Pradesh 520012</p>
                 <p>
                   Email: <span className="text-ink font-semibold">wasshotmedia@gmail.com</span> · Phone:{" "}
                   <span className="text-ink font-semibold">+91 73969 86817</span>
                 </p>
-                <p>Website: https://wasshot.in · GSTIN: 36ABCDE1234F1Z5</p>
+                <p>Website: https://wasshot.in · GSTIN: 37ABCDE1234F1Z5</p>
               </div>
             </div>
 

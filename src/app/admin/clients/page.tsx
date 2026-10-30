@@ -53,7 +53,7 @@ export default function ClientsPage() {
   const [formEmail, setFormEmail] = useState("");
   const [formPhone, setFormPhone] = useState("");
   const [formStatus, setFormStatus] = useState<NonNullable<Client["status"]>>("active");
-  const [formCity, setFormCity] = useState("Hyderabad");
+  const [formCity, setFormCity] = useState("Vijayawada");
   const [formNotes, setFormNotes] = useState("");
 
   useEffect(() => {
@@ -235,7 +235,7 @@ export default function ClientsPage() {
                 filtered.map((client) => {
                   const rawPhone = client.phone ? client.phone.replace(/\D/g, "") : "";
                   const displayStatus = client.status || "active";
-                  const displayCity = client.city || (client.address ? client.address.split(",").pop()?.trim() : "Hyderabad");
+                  const displayCity = client.city || (client.address ? client.address.split(",").pop()?.trim() : "Vijayawada");
 
                   return (
                     <tr key={client._id} className="hover:bg-[#fbfbfa] transition">

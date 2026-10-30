@@ -141,14 +141,14 @@ export default function ClientProfilePage({
           contactPerson: data.item.contactPerson || "",
           email: data.item.email || "",
           phone: data.item.phone || "",
-          city: data.item.city || (data.item.address ? data.item.address.split(",").pop()?.trim() : "Hyderabad"),
+          city: data.item.city || (data.item.address ? data.item.address.split(",").pop()?.trim() : "Vijayawada"),
           address: data.item.address || "",
           business: data.item.business || "",
           website: data.item.website || "",
           status: data.item.status || "active",
           notes: data.item.notes || "",
         });
-        setShootLocation(data.item.city || "WasShot Media Studio, Hyderabad");
+        setShootLocation(data.item.city || "WasShot Media Studio, Bhavanipuram, Vijayawada");
       }
     } catch (err) {
       console.error("Failed to load client details", err);
@@ -460,7 +460,7 @@ export default function ClientProfilePage({
 
   const rawPhone = client.phone ? client.phone.replace(/\D/g, "") : "";
   const displayStatus = client.status || "active";
-  const displayCity = client.city || (client.address ? client.address.split(",").pop()?.trim() : "Hyderabad");
+  const displayCity = client.city || (client.address ? client.address.split(",").pop()?.trim() : "Vijayawada");
 
   // Summary financials
   const totalBilled = invoices.reduce((s, i) => s + (i.total || 0), 0);
@@ -939,7 +939,7 @@ export default function ClientProfilePage({
                     `🎬 Shoot: ${ev.title}\n` +
                     `📅 Date: ${formattedDate}\n` +
                     `⏰ Time: ${formattedTime}\n` +
-                    `📍 Location: ${ev.location || "WasShot Media Studio, Hyderabad"}\n\n` +
+                    `📍 Location: ${ev.location || "WasShot Media Studio, Bhavanipuram, Vijayawada"}\n\n` +
                     `See you on set!`
                   );
                   const shootWaUrl = rawPhone
@@ -1342,7 +1342,7 @@ export default function ClientProfilePage({
                   type="text"
                   value={shootLocation}
                   onChange={(e) => setShootLocation(e.target.value)}
-                  placeholder="e.g. WasShot Media Studio, Jubilee Hills, Hyderabad"
+                  placeholder="e.g. WasShot Media Studio, Bhavanipuram, Vijayawada"
                   className="w-full rounded-xl border border-[#e8e8e3] bg-[#fbfbfa] px-3 py-2 text-xs font-semibold text-ink focus:border-orange focus:bg-white focus:outline-none"
                 />
               </div>
